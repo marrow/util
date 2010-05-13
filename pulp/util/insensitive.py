@@ -26,10 +26,18 @@ class CaseInsensitiveDict(dict):
         return [(self._o[k], self[k]) for k in self]
     
     def __setitem__(self, k, v):
-        nk = k.lower() if isinstance(k, basestring) else k
+        try:
+            nk = k.lower()
+        except:
+            nk = k
+        
         self._o[nk] = k
         super(CaseInsensitiveDict, self).__setitem__(nk, v)
     
     def __getitem__(self, k):
-        nk = k.lower() if isinstance(k, basestring) else k
+        try:
+            nk = k.lower()
+        except:
+            nk = k
+        
         return super(CaseInsensitiveDict, self).__getitem__(nk)
