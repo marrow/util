@@ -58,10 +58,10 @@ class TestPy3K(TestCase):
 
 class TestIO(TestCase):
     def test_string_bytes_io(self):
-        io = compat.IO("Hello world!")
+        io = compat.IO(b"Hello world!")
         value = io.read()
         
-        self.assertEquals(value, "Hello world!")
+        self.assertEquals(value, b"Hello world!")
         self.failUnless(isinstance(value, compat.binary))
         
         self.assertRaises(TypeError, lambda: compat.IO(uchar()))
