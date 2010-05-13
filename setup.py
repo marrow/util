@@ -20,8 +20,14 @@ if sys.version_info >= (3,0):
     # 3.x doesn't have execfile anymore, so we define our own
     # The code below is syntactically valid 2.x, but 2.x thinks that a tuple
     # gets passed to the exec statement.
-    def execfile(filename, globals=None, locals=None):
-        exec(compile(open(filename).read(), filename, 'exec'), globals, locals)
+    def execfile(filename, globals_=None, locals_=None):
+        if globals_ is None:
+            globals_ = globals()
+        
+        if locals_ is None:
+            locals_ = globals_
+        
+        exec(compile(open(filename).read(), filename, 'exec'), globals_, locals_)
 
 else:
     from __builtin__ import execfile
