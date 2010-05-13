@@ -56,5 +56,5 @@ setup(
             },
         zip_safe = True,
         
-        namespace_packages = ['pulp'],
+        namespace_packages = ['pulp', 'pulp.util'],
     )
