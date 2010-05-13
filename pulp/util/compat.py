@@ -9,14 +9,14 @@ Python 2.5 is the minimum version supported by Pulp, and great effort is being m
 from __future__ import with_statement
 import sys, traceback
 
-from pulp.util.bunch import Bunch
+import pulp.util.bunch
 
 
 __all__ = ['execfile', 'exception', 'binary', 'unicode', 'IO', 'parse_qsl']
 
 
 
-if sys.version_info >= (3,0):
+if sys.version_info >= (3,0): # pragma: no cover
     def execfile(filename, globals_=None, locals_=None):
         if globals_ is None:
             globals_ = globals()
@@ -50,7 +50,7 @@ def exception(maxTBlevel=None):
     excArgs = getattr(exc, 'args', None)
     excTb = traceback.format_tb(trbk, maxTBlevel)
     
-    return Bunch(
+    return pulp.util.bunch.Bunch(
             name = excName,
             cls = cls,
             exception = exc,

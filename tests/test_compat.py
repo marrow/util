@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import sys
 from unittest import TestCase
 
 
@@ -38,7 +39,15 @@ class TestPy3K(TestCase):
         self.assertEquals(len(data.decode('utf8')), 1)
     
     def test_unicode(self):
-        text = compat.unicode(u'ü')
+        if sys.version_info > (3, 0):
+            def uchar():
+                return 'ü'
+        
+        else:
+            def uchar():
+                return u'ü'
+            
+        text = compat.unicode(uchar())
         self.assertEquals(len(text), 1)
         
         self.failUnless(isinstance(text.encode('utf8'), compat.binary))

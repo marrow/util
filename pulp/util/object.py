@@ -3,6 +3,8 @@
 """Object instance and class helper functions."""
 
 
+from pulp.util.compat import binary, unicode
+
 __all__ = ['flatten', 'NoDefault', 'load_object', 'Cache']
 
 
@@ -22,7 +24,7 @@ def flatten(x):
     """
     
     for el in x:
-        if hasattr(el, "__iter__") and not isinstance(el, basestring):
+        if hasattr(el, "__iter__") and not isinstance(el, (binary, unicode)):
             for els in flatten(el):
                 yield els
         else:
