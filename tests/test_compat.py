@@ -8,16 +8,10 @@ from pulp.util import compat
 
 
 if sys.version_info >= (3, 0):
-    def uchar():
-        def inner():
-            return 'ü'
-        return inner()
+    from uni_compat3 import uchar
 
 else:
-    def uchar():
-        def inner():
-            return u'ü'
-        return inner()
+    from uni_compat2 import uchar
 
 
 
