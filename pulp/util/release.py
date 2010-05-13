@@ -4,8 +4,8 @@
 
 
 name = "pulp.util"
-version = "0.0.1"
-release = "0.0.1"
+version = "0.1.0"
+release = "0.1.0"
 
 summary = "Commonly shared Python utility subclasses and functions."
 description = """"""
