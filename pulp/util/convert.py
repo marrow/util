@@ -102,7 +102,7 @@ def array(input, separator=',', strip=True, empty=False):
         
         return input
     
-    if not isinstance(input, basestring):
+    if not isinstance(input, (binary, unicode)):
         if not empty:
             return [i for i in list(input) if i]
         
@@ -169,13 +169,13 @@ class KeywordProcessor(object):
         self.result = result
     
     def __call__(self, value):
-        if isinstance(value, basestring):
+        if isinstance(value, (binary, unicode)):
             return self.split(value)
         
         return self.join(value)
     
     def split(self, value):
-        if not isinstance(value, basestring): raise TypeError("Invalid type for argument 'value'.")
+        if not isinstance(value, (binary, unicode)): raise TypeError("Invalid type for argument 'value'.")
         
         matches = self.regex.findall(value)
         
