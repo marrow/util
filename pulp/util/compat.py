@@ -75,16 +75,20 @@ else: # pragma: no cover
 
 
 # In-memory binary stream representation for Python 2.5 or 2.6+.
-# Query string parsing.
 if sys.version_info >= (2, 6):
     from io import BytesIO as IO
-    from urlparse import parse_qsl
-    
+
 else: # pragma: no cover
     try:
         from cStringIO import cStringIO as IO
-        
+    
     except ImportError:
         from StringIO import StringIO as IO
+
+
+# Query string parsing.
+if sys.version_info < (3, 0):
+    from urlparse import parse_qsl
     
+else: # pragma: no cover
     from cgi import parse_qsl
