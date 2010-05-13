@@ -1,8 +1,17 @@
 # encoding: utf-8
 
+import sys
 from unittest import TestCase
 
 from pulp.util.path import Path
+
+
+if sys.version_info >= (3, 0):
+    from uni_compat3 import path_cases
+
+else:
+    from uni_compat2 import path_cases
+
 
 
 def assert_path(instance, expected, kind=list):
@@ -59,16 +68,7 @@ def test_path_unicode():
     class MockOb(object):
         path = Path()
     
-    cases = [
-            ('/', "/"),
-            (u'/©', u'/©'),
-            (u'/©/™', u'/©/™'),
-            (u'/©/™/', u'/©/™/'),
-            ((u'¡', ), u'¡'),
-            (('foo', u'¡'), u'foo/¡')
-        ]
-    
-    for case, expected in cases:
+    for case, expected in path_cases:
         instance = MockOb()
         instance.path = case
         
@@ -91,7 +91,6 @@ def test_path_comparison():
     assert Path('/foo') == ('', 'foo'), 'tuple comparison'
     assert Path('/foo') == ['', 'foo'], 'list comparison'
     assert Path('/foo') == '/foo', 'string comparison'
-    assert Path(u'/föö') == u'/föö', 'string comparison'
 
 def test_path_join():
     assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
