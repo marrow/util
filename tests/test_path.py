@@ -79,7 +79,7 @@ def test_path_unicode():
 
 class TestPaths(TestCase):
     def test_path_path(self):
-        assert Path(Path('/foo')) == [unicode(''), unicode('foo')]
+        self.assertEquals(Path(Path('/foo')), [unicode(''), unicode('foo')])
 
     def test_path_slicing(self):
         class MockOb(object):
@@ -95,12 +95,13 @@ class TestPaths(TestCase):
         self.assertEqual(unicode(instance.path[::2]), unicode('/bar'))
 
     def test_path_comparison(self):
-        assert Path('/foo') == (unicode(''), unicode('foo')), 'tuple comparison'
-        assert Path('/foo') == [unicode(''), unicode('foo')], 'list comparison'
-        assert Path('/foo') == unicode('/foo'), 'string comparison'
+        self.assertEqual(Path('/foo'), (unicode(''), unicode('foo')))
+        self.assertEqual(Path('/foo'), [unicode(''), unicode('foo')])
+        self.assertEqual(Path('/foo'), unicode('/foo'))
 
     def test_path_join(self):
-        assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
+        self.assertEqual(Path('/foo') + Path('/bar'), Path('/foo/bar'))
+        # TODO: self.assertEqual(Path('/foo') + Path('bar'), Path('/foo/bar'))
 
     def test_path_abs(self):
-        assert abs(Path('foo')) == Path('/foo')
+        self.assertEqual(abs(Path('foo')), Path('/foo'))
