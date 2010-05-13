@@ -39,8 +39,8 @@ class TestConverters(TestCase):
         self.assertEqual(conv.array((4, '', 5)), [4, 5])
         self.assertEqual(conv.array((4, '', 5), empty=True), [4, '', 5])
         
-        self.assertEqual(conv.array(b"foo,bar"), [b"foo", b"bar"])
-        self.assertEqual(conv.array(b"foo,,bar", empty=True), [b"foo", b'', b"bar"])
+        self.assertEqual(conv.array("foo,bar"), ["foo", "bar"])
+        self.assertEqual(conv.array("foo,,bar", empty=True), ["foo", '', "bar"])
         self.assertEqual(conv.array(uchar()), [uchar()])
         
         self.assertEqual(conv.array("foo|bar", '|'), ["foo", "bar"])
