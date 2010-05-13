@@ -179,7 +179,7 @@ class KeywordProcessor(object):
         
         matches = self.regex.findall(value)
         
-        if callable(self.normalize): matches = [self.normalize(i) for i in matches]
+        if hasattr(self.normalize, '__call__'): matches = [self.normalize(i) for i in matches]
         if self.sort: matches.sort()
         if not self.groups: return self.result(matches)
         
