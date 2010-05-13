@@ -23,4 +23,4 @@ class TestCaseInsensitiveDict(TestCase):
     def test_keys(self):
         d = CaseInsensitiveDict({None: 2})
         self.assertEqual(d, {None: 2})
-        self.assertEqual(d.get(None), 2)
+        self.assertEqual(d[None], 2)
