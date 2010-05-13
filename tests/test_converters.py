@@ -1,8 +1,16 @@
 # encoding: utf-8
 
+import sys
 from unittest import TestCase
 
 from pulp.util import convert as conv
+
+
+if sys.version_info >= (3, 0):
+    from uni_compat3 import uchar
+
+else:
+    from uni_compat2 import uchar
 
 
 
@@ -31,9 +39,9 @@ class TestConverters(TestCase):
         self.assertEqual(conv.array((4, '', 5)), [4, 5])
         self.assertEqual(conv.array((4, '', 5), empty=True), [4, '', 5])
         
-        self.assertEqual(conv.array("foo,bar"), ["foo", "bar"])
-        self.assertEqual(conv.array("foo,,bar", empty=True), ["foo", '', "bar"])
-        self.assertEqual(conv.array(u"baz, diz"), [u"baz", u"diz"])
+        self.assertEqual(conv.array(b"foo,bar"), [b"foo", b"bar"])
+        self.assertEqual(conv.array(b"foo,,bar", empty=True), [b"foo", b'', b"bar"])
+        self.assertEqual(conv.array(uchar()), [uchar()])
         
         self.assertEqual(conv.array("foo|bar", '|'), ["foo", "bar"])
         self.assertEqual(conv.array("baz |diz", '|', False), ["baz ", "diz"])
