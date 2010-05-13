@@ -48,9 +48,18 @@ class TestConverters(TestCase):
     
     def test_tags(self):
         self.assertEqual(
-                conv.tags('"high altitude" "melting panda" panda bends'),
+                conv.tags('"high altitude" "Melting Panda" panda bends'),
                 set(('bends', 'high altitude', 'melting panda', 'panda'))
             )
+    
+    def test_tag_join(self):
+        tags = conv.tags('"high altitude" "melting panda" panda bends')
+        self.assertEqual(conv.tags(tags), 'panda "high altitude" bends "melting panda"')
+    
+    def test_quoteless_join(self):
+        tagger = conv.KeywordProcessor(' ', None)
+        tags = tagger('panda bends')
+        self.assertEqual(tagger(tags), 'panda bends')
     
     def test_terms(self):
         self.assertEqual(

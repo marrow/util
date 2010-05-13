@@ -132,7 +132,7 @@ class KeywordProcessor(object):
     you automatically as :data:`tags` and :data:`terms`.
     """
     
-    def __init__(self, separators=' \t', quotes=['"', "'"], groups=[], group=False, normalize=None, sort=False, result=list):
+    def __init__(self, separators=' \t', quotes="\"'", groups=[], group=False, normalize=None, sort=False, result=list):
         """Configure the processor.
         
         :param separators: A list of acceptable separator characters.  The first will be used for joins.
@@ -149,6 +149,7 @@ class KeywordProcessor(object):
         """
         
         self.separators = separators = list(separators)
+        self.quotes = quotes = list(quotes) if quotes else []
         
         self.pattern = ''.join((
                 ('[\s%s]*' % (''.join(separators), )), # Trap possible leading space or separators.
@@ -204,16 +205,26 @@ class KeywordProcessor(object):
         return self.group([[match for match in groups[group]] for group in self.groups])
     
     def join(self, values):
+        def sanatize(keyword):
+            if not self.quotes:
+                return keyword
+            
+            for sep in self.separators:
+                if sep in keyword:
+                    return self.quotes[0] + keyword + self.quotes[0]
+            
+            return keyword
+        
         if self.group is dict:
             if not isinstance(values, dict):
                 raise ValueError("Dictionary grouped values must be passed as a dictionary.") # pragma: no cover
             
-            return self.separators[0].join([(prefix + keyword) for prefix, keywords in values.iteritems() for keyword in keywords])
+            return self.separators[0].join([(prefix + sanatize(keyword)) for prefix, keywords in values.iteritems() for keyword in keywords])
         
         if not isinstance(values, (list, tuple, set)):
             raise ValueError("Ungrouped values must be passed as a list, tuple, or set.")
-        print repr(self.separators)
-        return self.separators[0].join(values)
+        
+        return self.separators[0].join([sanatize(keyword) for keyword in values])
 
 
 tags = KeywordProcessor(' \t,', normalize=lambda s: s.lower().strip('"'), sort=True, result=set)
