@@ -62,7 +62,12 @@ def test_path_str():
     
     instance = MockOb()
     instance.path = '/foo/bar'
-    yield assert_path, instance, """<Path "deque([\'\', \'foo\', \'bar\'])">""", repr
+    
+    if sys.version_info >= (3, 0):
+        yield assert_path, instance, """<Path "deque([\'\', \'foo\', \'bar\'])">""", repr
+    
+    else:
+        yield assert_path, instance, """<Path "deque([u\'\', u\'foo\', u\'bar\'])">""", repr
 
 def test_path_unicode():
     class MockOb(object):
