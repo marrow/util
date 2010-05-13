@@ -3,7 +3,7 @@
 """A dictionary with case-insensitive access."""
 
 
-from .object import NoDefault
+from pulp.util.object import NoDefault
 
 
 __all__ = ['CaseInsensitiveDict']
