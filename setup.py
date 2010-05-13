@@ -36,7 +36,7 @@ setup(
         install_requires = [],
         
         test_suite = 'nose.collector',
-        tests_require = ['nose', 'coverage'],
+        tests_require = ['nose', 'coverage', 'nose-achievements'],
         
         classifiers = [
                 "Development Status :: 1 - Planning",

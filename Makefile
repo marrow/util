@@ -1,4 +1,12 @@
-.PHONY: update install develop devel docs tests test release
+.PHONY: clean update install develop devel docs tests test release
+
+test: tests
+
+clean:
+	rm -rvf *.egg-info
+	rm -rvf build
+	rm -rvf dist
+	find . -iname \*.pyc -or -iname \*.pyo -exec rm -vf {} \;
 
 update:
 	git pull origin master
@@ -16,12 +24,11 @@ devel: develop
 
 .testing-deps:
 	pip install -q nose coverage
+	pip install git+git://github.com/exogen/nose-achievements.git
 	@touch .testing-deps
 
 tests: .testing-deps
 	python setup.py nosetests
 
-test: tests
-
-#release:
-#	python setup.py install
+release:
+	python setup.py sdist bdist_egg
