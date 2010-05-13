@@ -19,7 +19,7 @@ def assert_path(instance, expected, kind=list):
     assert kind(instance.path) == expected, (kind(instance.path), expected)
 
 def test_path_path():
-    assert Path(Path('/foo')) == ['', 'foo']
+    assert Path(Path('/foo')) == [unicode(''), unicode('foo')]
 
 def test_path_list():
     class MockOb(object):
@@ -94,9 +94,9 @@ def test_path_slicing():
     assert str(instance.path[::2]) == '/bar'
 
 def test_path_comparison():
-    assert Path('/foo') == ('', 'foo'), 'tuple comparison'
-    assert Path('/foo') == ['', 'foo'], 'list comparison'
-    assert Path('/foo') == '/foo', 'string comparison'
+    assert Path('/foo') == (unicode(''), unicode('foo')), 'tuple comparison'
+    assert Path('/foo') == [unicode(''), unicode('foo')], 'list comparison'
+    assert Path('/foo') == unicode('/foo'), 'string comparison'
 
 def test_path_join():
     assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
