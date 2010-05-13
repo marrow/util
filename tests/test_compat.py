@@ -57,7 +57,7 @@ class TestPy3K(TestCase):
             self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
         
         else:
-            self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
+            self.assertRaises(TypeError, lambda: compat.binary(uchar()))
 
 
 class TestIO(TestCase):
