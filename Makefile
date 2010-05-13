@@ -14,8 +14,12 @@ devel: develop
 #docs:
 #	python setup.py install
 
-tests:
-	python setup.py test
+.testing-deps:
+	pip install -q nose coverage
+	@touch .testing-deps
+
+tests: .testing-deps
+	python setup.py nosetests
 
 test: tests
 
