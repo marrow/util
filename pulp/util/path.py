@@ -2,6 +2,8 @@
 
 import collections
 
+from pulp.util.compat import binary, unicode
+
 
 __all__ = ['Path']
 
@@ -20,7 +22,7 @@ class Path(collections.deque):
         separator = self.separator
         self.clear()
 
-        if isinstance(value, (str, unicode)):
+        if isinstance(value, (binary, unicode)):
             self.extend(value.split(separator))
             return
 
@@ -30,7 +32,7 @@ class Path(collections.deque):
         self._assign(value)
 
     def __str__(self):
-        return str(self.separator).join(self)
+        return binary(self.separator).join(self)
 
     def __unicode__(self):
         return unicode(self.separator).join(self)
