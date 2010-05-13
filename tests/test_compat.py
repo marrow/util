@@ -9,11 +9,15 @@ from pulp.util import compat
 
 if sys.version_info >= (3, 0):
     def uchar():
-        return 'ü'
+        def inner():
+            return 'ü'
+        return inner()
 
 else:
     def uchar():
-        return u'ü'
+        def inner():
+            return u'ü'
+        return inner()
 
 
 
