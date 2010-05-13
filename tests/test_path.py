@@ -3,6 +3,7 @@
 import sys
 from unittest import TestCase
 
+from pulp.util.compat import binary, unicode
 from pulp.util.path import Path
 
 
