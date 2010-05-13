@@ -7,6 +7,15 @@ from unittest import TestCase
 from pulp.util import compat
 
 
+if sys.version_info >= (3, 0):
+    def uchar():
+        return 'ü'
+
+else:
+    def uchar():
+        return u'ü'
+
+
 
 class TestPy3K(TestCase):
     def test_exception(self):
@@ -39,14 +48,6 @@ class TestPy3K(TestCase):
         self.assertEquals(len(data.decode('utf8')), 1)
     
     def test_unicode(self):
-        if sys.version_info > (3, 0):
-            def uchar():
-                return 'ü'
-        
-        else:
-            def uchar():
-                return u'ü'
-            
         text = compat.unicode(uchar())
         self.assertEquals(len(text), 1)
         
@@ -54,7 +55,7 @@ class TestPy3K(TestCase):
         self.assertEquals(len(text.encode('utf8')), 2)
     
     def test_byte_errors(self):
-        self.assertRaises(UnicodeEncodeError, lambda: compat.binary(u'ü'))
+        self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
 
 
 class TestIO(TestCase):
@@ -65,4 +66,4 @@ class TestIO(TestCase):
         self.assertEquals(value, "Hello world!")
         self.failUnless(isinstance(value, compat.binary))
         
-        self.assertRaises(TypeError, lambda: compat.IO(u"ü"))
+        self.assertRaises(TypeError, lambda: compat.IO(uchar()))
