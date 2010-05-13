@@ -15,6 +15,7 @@ install:
 	python setup.py install
 
 develop:
+	cp -f setup.cfg-devel setup.cfg
 	python setup.py develop
 
 devel: develop
@@ -30,5 +31,7 @@ devel: develop
 tests: .testing-deps
 	python setup.py nosetests
 
-release:
-	python setup.py sdist bdist_egg
+release: tests
+	cp -f setup.cfg-release setup.cfg
+	python setup.py register sdist bdist_egg upload
+	cp -f setup.cfg-devel setup.cfg
