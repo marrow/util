@@ -46,6 +46,19 @@ class TestAttributeDictionary(TestCase):
             del d.foo
         
         self.assertRaises(AttributeError, error_test)
+    
+    def test_partial(self):
+        d1 = Bunch({'foo.bar': 1, 'foo.baz': 2, 'diz': 3})
+        d2 = Bunch.partial('foo', d1)
+        
+        self.assertEqual(d2.get('diz', None), None)
+        self.assertEqual(d2.baz, 2)
+        
+        d2.bar = 4
+        
+        self.assertEqual(d1['foo.bar'], 1)
+        self.assertEqual(d1.foo.bar, 1)
+        
 
 
 class TestMultipleAttributeDictionary(TestCase):

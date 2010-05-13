@@ -13,22 +13,38 @@ __all__ = ['Bunch', 'MultiBunch']
 class Bunch(dict):
     """A dictionary with attribute-style access. It maps attribute access to the real dictionary."""
     
-    def __init__(self, *args, **kw):
-        dict.__init__(self, *args, **kw)
-    
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, super(Bunch, self).__repr__())
     
     def __getattr__(self, name):
-        return self[name]
+        try:
+            return self[name]
+        
+        except KeyError:
+            try:
+                return self.partial(name, self)
+            
+            except ValueError:
+                raise AttributeError(name)
     
     __setattr__ = dict.__setitem__
     
     def __delattr__(self, name):
         try:
             del self[name]
+        
         except KeyError:
-            raise AttributeError
+            raise AttributeError(name)
+    
+    @classmethod
+    def partial(cls, prefix, source):
+        """Strip a prefix from the keys of another dictionary, returning a Bunch containing only valid key, value pairs."""
+        match = prefix + "."
+        
+        matches = cls([(key.lstrip(match), source[key]) for key in source if key.startswith(prefix)])
+        
+        if not matches: raise ValueError('No values with the prefix ' + prefix + ' found.')
+        return matches
 
 
 class MultiBunch(Bunch):
