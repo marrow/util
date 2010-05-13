@@ -25,7 +25,7 @@ class TestPy3K(TestCase):
             
             self.assertEquals(exc.name, 'ZeroDivisionError')
             self.assertEquals(exc.cls, ZeroDivisionError)
-            self.assertEquals(exc.args, ('integer division or modulo by zero', ))
+            self.assertTrue('division or modulo by zero' in exc.args[0])
         
         try:
             raise Exception('foo', 1)
