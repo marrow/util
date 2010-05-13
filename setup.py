@@ -16,6 +16,16 @@ from setuptools import setup, find_packages
 if sys.version_info <= (2, 5):
     raise SystemExit("Python 2.5 or later is required.")
 
+if sys.version_info >= (3,0):
+    # 3.x doesn't have execfile anymore, so we define our own
+    # The code below is syntactically valid 2.x, but 2.x thinks that a tuple
+    # gets passed to the exec statement.
+    def execfile(filename, globals=None, locals=None):
+        exec(compile(open(filename).read(), filename, 'exec'), globals, locals)
+
+else:
+    from __builtin__ import execfile
+
 execfile(os.path.join("pulp", "util", "release.py"))
 
 
