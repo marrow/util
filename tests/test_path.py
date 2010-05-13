@@ -18,9 +18,6 @@ else:
 def assert_path(instance, expected, kind=list):
     assert kind(instance.path) == expected, (kind(instance.path), expected)
 
-def test_path_path():
-    assert Path(Path('/foo')) == [unicode(''), unicode('foo')]
-
 def test_path_list():
     class MockOb(object):
         path = Path()
@@ -80,26 +77,30 @@ def test_path_unicode():
         
         yield assert_path, instance, expected, unicode
 
-def test_path_slicing():
-    class MockOb(object):
-        path = Path()
-    
-    instance = MockOb()
-    
-    instance.path = '/foo/bar/baz'
-    
-    assert str(instance.path[1:]) == 'foo/bar/baz'
-    assert str(instance.path[2:]) == 'bar/baz'
-    assert str(instance.path[0:2]) == '/foo'
-    assert str(instance.path[::2]) == '/bar'
+class TestPaths(TestCase):
+    def test_path_path(self):
+        assert Path(Path('/foo')) == [unicode(''), unicode('foo')]
 
-def test_path_comparison():
-    assert Path('/foo') == (unicode(''), unicode('foo')), 'tuple comparison'
-    assert Path('/foo') == [unicode(''), unicode('foo')], 'list comparison'
-    assert Path('/foo') == unicode('/foo'), 'string comparison'
+    def test_path_slicing(self):
+        class MockOb(object):
+            path = Path()
+    
+        instance = MockOb()
+    
+        instance.path = '/foo/bar/baz'
+        
+        self.assertEqual(instance.path[1:], unicode('foo/bar/baz'))
+        self.assertEqual(instance.path[2:], unicode('bar/baz'))
+        self.assertEqual(instance.path[0:2], unicode('/foo'))
+        self.assertEqual(instance.path[::2], unicode('/bar'))
 
-def test_path_join():
-    assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
+    def test_path_comparison(self):
+        assert Path('/foo') == (unicode(''), unicode('foo')), 'tuple comparison'
+        assert Path('/foo') == [unicode(''), unicode('foo')], 'list comparison'
+        assert Path('/foo') == unicode('/foo'), 'string comparison'
 
-def test_path_abs():
-    assert abs(Path('foo')) == Path('/foo')
+    def test_path_join(self):
+        assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
+
+    def test_path_abs(self):
+        assert abs(Path('foo')) == Path('/foo')
