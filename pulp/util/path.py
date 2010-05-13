@@ -56,7 +56,7 @@ class Path(collections.deque):
         if isinstance(other, (binary, unicode)):
             return unicode(self) == unicode(other)
         
-        return super(Path, self).__eq__(other)
+        return list(self) == list(other)
 
     def __getitem__(self, i):
         try:
