@@ -92,3 +92,9 @@ def test_path_comparison():
     assert Path('/foo') == ['', 'foo'], 'list comparison'
     assert Path('/foo') == '/foo', 'string comparison'
     assert Path(u'/föö') == u'/föö', 'string comparison'
+
+def test_path_join():
+    assert Path('/foo') + Path('/bar') == Path('/foo/bar'), 'path concatenation'
+
+def test_path_abs():
+    assert abs(Path('foo')) == Path('/foo')
