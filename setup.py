@@ -26,7 +26,7 @@ if sys.version_info >= (3,0):
 else:
     from __builtin__ import execfile
 
-execfile(os.path.join("pulp", "util", "release.py"))
+execfile(os.path.join("pulp", "util", "release.py"), globals(), locals())
 
 
 
