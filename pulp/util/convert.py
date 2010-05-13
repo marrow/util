@@ -184,7 +184,7 @@ class KeywordProcessor(object):
         if not self.groups: return self.result(matches)
         
         groups = dict([(i, list()) for i in self.groups])
-        if None not in groups.iterkeys(): groups[None] = list() # To prevent errors.
+        if None not in groups: groups[None] = list() # To prevent errors.
         
         for i in matches:
             if i[0] in self.groups:
