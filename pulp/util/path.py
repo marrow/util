@@ -51,6 +51,12 @@ class Path(collections.deque):
         """
         
         return cmp(type(other)(self), other)
+    
+    def __eq__(self, other):
+        if isinstance(other, (binary, unicode)):
+            return unicode(self) == unicode(other)
+        
+        return super(Path, self).__eq__(other)
 
     def __getitem__(self, i):
         try:
