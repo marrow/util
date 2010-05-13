@@ -89,10 +89,10 @@ class TestPaths(TestCase):
     
         instance.path = '/foo/bar/baz'
         
-        self.assertEqual(instance.path[1:], unicode('foo/bar/baz'))
-        self.assertEqual(instance.path[2:], unicode('bar/baz'))
-        self.assertEqual(instance.path[0:2], unicode('/foo'))
-        self.assertEqual(instance.path[::2], unicode('/bar'))
+        self.assertEqual(unicode(instance.path[1:]), unicode('foo/bar/baz'))
+        self.assertEqual(unicode(instance.path[2:]), unicode('bar/baz'))
+        self.assertEqual(unicode(instance.path[0:2]), unicode('/foo'))
+        self.assertEqual(unicode(instance.path[::2]), unicode('/bar'))
 
     def test_path_comparison(self):
         assert Path('/foo') == (unicode(''), unicode('foo')), 'tuple comparison'
