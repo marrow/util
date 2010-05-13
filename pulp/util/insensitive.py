@@ -17,13 +17,13 @@ class CaseInsensitiveDict(dict):
             default = dict()
             default.update(kw)
         
-        for i, j in default.iteritems():
-            self[i] = j
+        for i in default:
+            self[i] = default[i]
         
         super(CaseInsensitiveDict, self).__init__()
     
     def items(self):
-        return [(self._o[k], v) for k, v in self.iteritems()]
+        return [(self._o[k], self[k]) for k in self]
     
     def __setitem__(self, k, v):
         nk = k.lower() if isinstance(k, basestring) else k

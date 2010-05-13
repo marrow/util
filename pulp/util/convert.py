@@ -219,7 +219,7 @@ class KeywordProcessor(object):
             if not isinstance(values, dict):
                 raise ValueError("Dictionary grouped values must be passed as a dictionary.") # pragma: no cover
             
-            return self.separators[0].join([(prefix + sanatize(keyword)) for prefix, keywords in values.iteritems() for keyword in keywords])
+            return self.separators[0].join([(prefix + sanatize(keyword)) for prefix, keywords in values for keyword in values[prefix]])
         
         if not isinstance(values, (list, tuple, set)):
             raise ValueError("Ungrouped values must be passed as a list, tuple, or set.")
