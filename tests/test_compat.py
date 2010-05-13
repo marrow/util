@@ -53,7 +53,11 @@ class TestPy3K(TestCase):
         self.assertEquals(len(text.encode('utf8')), 2)
     
     def test_byte_errors(self):
-        self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
+        if sys.version_info < (3, 0):
+            self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
+        
+        else:
+            self.assertRaises(UnicodeEncodeError, lambda: compat.binary(uchar()))
 
 
 class TestIO(TestCase):
