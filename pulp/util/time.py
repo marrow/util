@@ -8,14 +8,10 @@ __all__ = ['UTC', 'delta_to_seconds', 'day', 'week', 'hour', 'minute', 'second',
 
 
 class _UTC(tzinfo):
-    def dst(self, dt):
-        return timedelta(0)
-    def utcoffset(self, dt):
-        return timedelta(0)
-    def tzname(self, dt):
-        return 'UTC'
-    def __repr__(self):
-        return 'UTC'
+    __repr__ = lambda: 'UTC'
+    dst = lambda dt: timedelta(0)
+    utcoffset = lambda dt: timedelta(0)
+    tzname = lambda dt: 'UTC'
 
 UTC = _UTC()
 
