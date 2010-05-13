@@ -31,9 +31,9 @@ def exception(maxTBlevel=None):
     This functionality allows you to trap an exception in a method agnostic to differences between Python 2.x and 3.x.
     """
     
-    cla, exc, trbk = sys.exc_info()
-    excName = cla.__name__
-    excArgs = exc.__dict__.get('args', None)
+    cls, exc, trbk = sys.exc_info()
+    excName = cls.__name__
+    excArgs = getattr(exc, 'args', None)
     excTb = traceback.format_tb(trbk, maxTBlevel)
     
     return Bunch(

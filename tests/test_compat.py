@@ -8,6 +8,28 @@ from pulp.util import compat
 
 
 class TestPy3K(TestCase):
+    def test_exception(self):
+        try:
+            1/0
+        
+        except:
+            exc = compat.exception()
+            
+            self.assertEquals(exc.name, 'ZeroDivisionError')
+            self.assertEquals(exc.cls, ZeroDivisionError)
+            self.assertEquals(exc.args, ('integer division or modulo by zero', ))
+        
+        try:
+            raise Exception('foo', 1)
+
+        except:
+            exc = compat.exception()
+
+            self.assertEquals(exc.name, 'Exception')
+            self.assertEquals(exc.cls, Exception)
+            self.assertEquals(exc.args, ('foo', 1))
+        
+    
     def test_bytes(self):
         data = compat.binary(b'\xc3\xbc')
         self.assertEquals(len(data), 2)
