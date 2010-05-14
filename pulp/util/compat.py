@@ -9,8 +9,6 @@ Python 2.5 is the minimum version supported by Pulp, and great effort is being m
 from __future__ import with_statement
 import sys, traceback
 
-import pulp.util.bunch
-
 
 __all__ = ['execfile', 'exception', 'binary', 'unicode', 'IO', 'parse_qsl']
 
@@ -45,12 +43,14 @@ def exception(maxTBlevel=None):
     This functionality allows you to trap an exception in a method agnostic to differences between Python 2.x and 3.x.
     """
     
+    from pulp.util.bunch import Bunch
+    
     cls, exc, trbk = sys.exc_info()
     excName = cls.__name__
     excArgs = getattr(exc, 'args', None)
     excTb = traceback.format_tb(trbk, maxTBlevel)
     
-    return pulp.util.bunch.Bunch(
+    return Bunch(
             name = excName,
             cls = cls,
             exception = exc,
