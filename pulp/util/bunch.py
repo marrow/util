@@ -18,7 +18,8 @@ class Bunch(dict):
     
     def __getattr__(self, name):
         try:
-            return self[name]
+            value = self[name]
+            return Bunch(value) if isinstance(value, dict) else value
         
         except KeyError:
             try:
