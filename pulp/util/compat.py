@@ -43,21 +43,26 @@ def exception(maxTBlevel=None):
     This functionality allows you to trap an exception in a method agnostic to differences between Python 2.x and 3.x.
     """
     
-    from pulp.util.bunch import Bunch
+    try:
+        from pulp.util.bunch import Bunch
     
-    cls, exc, trbk = sys.exc_info()
-    excName = cls.__name__
-    excArgs = getattr(exc, 'args', None)
-    excTb = traceback.format_tb(trbk, maxTBlevel)
+        cls, exc, trbk = sys.exc_info()
+        excName = cls.__name__
+        excArgs = getattr(exc, 'args', None)
     
-    return Bunch(
-            name = excName,
-            cls = cls,
-            exception = exc,
-            trace = trbk,
-            formatted = excTb,
-            args = excArgs
-        )    
+        excTb = ''.join(traceback.format_exception(cls, exc, trbk, maxTBlevel))
+    
+        return Bunch(
+                name = excName,
+                cls = cls,
+                exception = exc,
+                trace = trbk,
+                formatted = excTb,
+                args = excArgs
+            )
+    
+    finally:
+        del cls, exc, trbk
 
 
 # Binary and Unicode representations for Python 2.5, 2.6+, or 3.x.
