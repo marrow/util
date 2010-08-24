@@ -29,7 +29,7 @@ if sys.version_info >= (3,0):
 else:
     from __builtin__ import execfile
 
-execfile(os.path.join("pulp", "util", "release.py"), globals(), locals())
+execfile(os.path.join("marrow", "util", "release.py"), globals(), locals())
 
 
 
@@ -69,5 +69,5 @@ setup(
             },
         zip_safe = True,
         
-        namespace_packages = ['pulp', 'pulp.util'],
+        namespace_packages = ['marrow', 'marrow.util'],
     )

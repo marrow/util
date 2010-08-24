@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pulp.util.bunch import Bunch, MultiBunch
+from marrow.util.bunch import Bunch, MultiBunch
 
 
 

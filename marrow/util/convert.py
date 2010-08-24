@@ -6,7 +6,7 @@ import re
 import collections
 import inspect
 
-from pulp.util.compat import binary, unicode
+from marrow.util.compat import binary, unicode
 
 
 __all__ = ['boolean', 'array', 'KeywordProcessor', 'Path', 'tags', 'terms']

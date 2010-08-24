@@ -44,7 +44,7 @@ def exception(maxTBlevel=None):
     """
     
     try:
-        from pulp.util.bunch import Bunch
+        from marrow.util.bunch import Bunch
     
         cls, exc, trbk = sys.exc_info()
         excName = cls.__name__

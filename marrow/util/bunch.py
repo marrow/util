@@ -3,7 +3,7 @@
 """A dictionary with attribute-style access."""
 
 
-from pulp.util.object import NoDefault
+from marrow.util.object import NoDefault
 
 
 __all__ = ['Bunch', 'MultiBunch']

@@ -4,7 +4,7 @@ import sys
 from unittest import TestCase
 
 
-from pulp.util import compat
+from marrow.util import compat
 
 
 if sys.version_info >= (3, 0):

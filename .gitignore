@@ -6,6 +6,7 @@
 build/
 dist/
 tests/.coverage
+tests/.achievements
 .coverage
 third-party
 .testing-deps

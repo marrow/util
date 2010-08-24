@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import sys, os
-from pulp.util import release
+from marrow.util import release
 
 # sys.path.append(os.path.abspath('../'))
 
@@ -108,7 +108,7 @@ html_split_index = False
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pulp.util-doc'
+htmlhelp_basename = 'marrow.util-doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -122,7 +122,7 @@ latex_font_size = '10pt'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'pulp.util.tex', u'Pulp Utilities Documentation', u'Alice Bevan-McGregor', 'manual'),
+  ('index', 'marrow.util.tex', u'Marrow Utilities Documentation', u'Alice Bevan-McGregor', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

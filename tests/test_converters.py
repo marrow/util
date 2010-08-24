@@ -3,7 +3,7 @@
 import sys
 from unittest import TestCase
 
-from pulp.util import convert as conv
+from marrow.util import convert as conv
 
 
 if sys.version_info >= (3, 0):

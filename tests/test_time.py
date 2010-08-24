@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pulp.util.time import delta_to_seconds, hour, map_month, map_dow
+from marrow.util.time import delta_to_seconds, hour, map_month, map_dow
 
 
 

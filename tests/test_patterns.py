@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pulp.util.patterns import Borg
+from marrow.util.patterns import Borg
 
 
 

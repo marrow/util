@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pulp.util.insensitive import CaseInsensitiveDict
+from marrow.util.insensitive import CaseInsensitiveDict
 
 
 

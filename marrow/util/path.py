@@ -2,7 +2,7 @@
 
 import collections
 
-from pulp.util.compat import binary, unicode
+from marrow.util.compat import binary, unicode
 
 
 __all__ = ['Path']

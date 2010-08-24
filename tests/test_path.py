@@ -3,8 +3,8 @@
 import sys
 from unittest import TestCase
 
-from pulp.util.compat import binary, unicode
-from pulp.util.path import Path
+from marrow.util.compat import binary, unicode
+from marrow.util.path import Path
 
 
 if sys.version_info >= (3, 0):

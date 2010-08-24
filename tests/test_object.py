@@ -2,8 +2,8 @@
 
 from unittest import TestCase
 
-from pulp.util.bunch import Bunch
-from pulp.util.object import flatten, load_object, Cache
+from marrow.util.bunch import Bunch
+from marrow.util.object import flatten, load_object, Cache
 
 
 
@@ -16,9 +16,9 @@ class TestOOUtils(TestCase):
             )
     
     def test_load_object(self):
-        self.failUnless(load_object('pulp.util.bunch:Bunch') is Bunch)
-        self.assertRaises(AttributeError, lambda: load_object('pulp.util.bunch:Foo'))
-        self.assertRaises(ImportError, lambda: load_object('pulp.foo:Bar'))
+        self.failUnless(load_object('marrow.util.bunch:Bunch') is Bunch)
+        self.assertRaises(AttributeError, lambda: load_object('marrow.util.bunch:Foo'))
+        self.assertRaises(ImportError, lambda: load_object('marrow.foo:Bar'))
 
 
 class TestOOCache(TestCase):

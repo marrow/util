@@ -3,7 +3,7 @@
 """Object instance and class helper functions."""
 
 
-from pulp.util.compat import binary, unicode
+from marrow.util.compat import binary, unicode
 
 __all__ = ['flatten', 'NoDefault', 'load_object', 'Cache']
 
