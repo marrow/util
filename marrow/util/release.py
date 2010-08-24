@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-"""Release information about Pulp."""
+"""Release information about Marrow."""
 
 
 name = "marrow.util"
-version = "0.1.1"
-release = "0.1.1"
+version = "1.0.0"
+release = "1.0.0"
 
 summary = "Commonly shared Python utility subclasses and functions."
 description = """"""

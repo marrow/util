@@ -3,7 +3,7 @@
 
 """Compatability features.
 
-Python 2.5 is the minimum version supported by Pulp, and great effort is being made to support Python 3.x.
+Python 2.5 is the minimum version supported by Marrow, and great effort is being made to support Python 3.x.
 """
 
 from __future__ import with_statement

@@ -57,7 +57,7 @@ html_theme_path = ['tools/themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Pulp Utilities %s Documentation" % (version, )
+html_title = "Marrow Utilities %s Documentation" % (version, )
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
