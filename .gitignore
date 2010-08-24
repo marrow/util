@@ -3,6 +3,8 @@
 *.egg-info
 *.DS_Store
 *~
+.docs-deps
+.testing-deps
 build/
 dist/
 tests/.coverage

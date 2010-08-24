@@ -20,13 +20,16 @@ develop:
 
 devel: develop
 
-docs:
+.docs-deps:
+	pip install -q sphinx
+	@touch .docs-deps
+
+docs: .docs-deps
 	@mkdir -p docs/build/html
 	sphinx-build -b html -d docs/build/doctrees docs/source build/html
 
 .testing-deps:
-	pip install -q nose coverage
-	pip install git+git://github.com/exogen/nose-achievements.git
+	pip install -q nose coverage git+git://github.com/exogen/nose-achievements.git
 	@touch .testing-deps
 
 tests: .testing-deps
