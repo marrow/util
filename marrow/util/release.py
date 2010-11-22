@@ -4,8 +4,8 @@
 
 
 name = "marrow.util"
-version = "1.0.0"
-release = "1.0.0"
+version = "1.0.1"
+release = "1.0.1"
 
 summary = "Commonly shared Python utility subclasses and functions."
 description = """"""
