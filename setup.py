@@ -63,7 +63,7 @@ setup(
                 "Programming Language :: Python :: 3",
                 "Programming Language :: Python :: 3.1",
                 "Programming Language :: Python :: 3.2",
-                "Topic :: Software Development :: Libraries :: Python Modules"
+                "Topic :: Software Development :: Libraries :: Python Modules",
                 "Topic :: Utilities"
             ],
         
