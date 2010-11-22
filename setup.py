@@ -49,7 +49,7 @@ setup(
         install_requires = [],
         
         test_suite = 'nose.collector',
-        tests_require = ['nose', 'coverage', 'nose-achievements'],
+        tests_require = ['nose', 'coverage'],
         
         classifiers = [
                 "Development Status :: 5 - Production/Stable",
@@ -58,7 +58,13 @@ setup(
                 "License :: OSI Approved :: MIT License",
                 "Operating System :: OS Independent",
                 "Programming Language :: Python",
+                "Programming Language :: Python :: 2.6",
+                "Programming Language :: Python :: 2.7",
+                "Programming Language :: Python :: 3",
+                "Programming Language :: Python :: 3.1",
+                "Programming Language :: Python :: 3.2",
                 "Topic :: Software Development :: Libraries :: Python Modules"
+                "Topic :: Utilities"
             ],
         
         packages = find_packages(exclude=['tests', 'tests.*', 'docs']),

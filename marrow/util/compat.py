@@ -97,3 +97,11 @@ if sys.version_info < (3, 0):
     
 else: # pragma: no cover
     from cgi import parse_qsl
+
+
+# Range/xrange.
+if sys.version_info < (3, 0):
+    from __builtin__ import xrange
+
+else: # pragma: no cover
+    xrange = range
