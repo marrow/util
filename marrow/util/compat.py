@@ -10,10 +10,35 @@ from __future__ import with_statement
 import sys, traceback
 
 
-__all__ = ['execfile', 'exception', 'binary', 'unicode', 'IO', 'parse_qsl']
+__all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary', 'unicode', 'bytestring', 'native', 'uvalues', 'IO', 'parse_qsl']
 
 
+try: # pragma: no cover
+    from email.utils import formatdate
 
+except ImportError:
+    from rfc822 import formatdate
+
+
+try:
+    from urllib import unquote_plus as unquote
+
+except: # pragma: no cover
+    from urllib.parse import unquote_plus as unquote_
+    
+    def unquote(t):
+        """Python 3 requires unquote to be passed unicode, but unicode characters may be encoded using quoted bytes!"""
+        return unquote_(t.decode('iso-8859-1')).encode('iso-8859-1')
+
+
+try:
+    range = xrange
+
+except:
+    pass
+
+
+# Reimplementation of execfile for Python 3.
 if sys.version_info >= (3,0): # pragma: no cover
     def execfile(filename, globals_=None, locals_=None):
         if globals_ is None:
@@ -77,6 +102,64 @@ elif sys.version_info >= (3, 0): # pragma: no cover
 else: # pragma: no cover
     binary = str
     unicode = unicode
+
+
+def bytestring(s, encoding="iso-8859-1", fallback="iso-8859-1"):
+    """Convert a given string into a bytestring."""
+    
+    if not isinstance(s, unicode):
+        return s
+    
+    try:
+        s.encode(encoding)
+    
+    except UnicodeError:
+        s.encode(fallback)
+
+
+def native(s, encoding="iso-8859-1", fallback="iso-8859-1"):
+    """Convert a given string into a native string."""
+    
+    if isinstance(s, str):
+        return s
+    
+    if str is unicode:
+        try:
+            return s.decode(encoding)
+        
+        except UnicodeError:
+            if fallback is None: raise
+            return s.decode(fallback)
+    
+    try:
+        return s.decode(encoding)
+    
+    except UnicodeError:
+        if fallback is None: raise
+        return s.decode(fallback)
+
+
+def uvalues(a, encoding="iso-8859-1", fallback="iso-8859-1"):
+    """Return a list of decoded values from an iterator.
+    
+    If any of the values fail to decode, re-decode all values using the fallback.
+    """
+    
+    try:
+        v = []
+        
+        for s in a:
+            v.append(s.decode(encoding))
+        
+        return encoding, v
+    
+    except UnicodeError:
+        v = []
+        
+        for s in a:
+            v.apend(s.decode(fallback))
+        
+        return fallback, v
 
 
 # In-memory binary stream representation for Python 2.5 or 2.6+.

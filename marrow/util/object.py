@@ -2,10 +2,13 @@
 
 """Object instance and class helper functions."""
 
+import logging
+
+from functools import partial
 
 from marrow.util.compat import binary, unicode
 
-__all__ = ['flatten', 'NoDefault', 'load_object', 'Cache']
+__all__ = ['flatten', 'NoDefault', 'load_object', 'Cache', 'LoggingFile']
 
 
 
@@ -152,3 +155,30 @@ class Cache(dict):
 
         element.previous, element.next = None, self.head
         self.head.previous = self.head = element
+
+class LoggingFile(object): # pragma: no cover
+    """A write-only file-like object that redirects to the standard Python logging module."""
+    
+    def __init__(self, logger=None, level=logging.ERROR):
+        logger = logger if logger else logging.getLogger('logfile')
+        self.logger = partial(logger.log, level)
+    
+    def write(self, text):
+        self.logger(text)
+    
+    def writelines(self, lines):
+        for line in lines:
+            self.logger(line)
+    
+    def close(self, *args, **kw): 
+        """A no-op method used for several of the file-like object methods."""
+        pass
+    
+    def next(self, *args, **kw):
+        """An error-raising exception usedbfor several of the methods."""
+        raise IOError("Logging files can not be read.")
+    
+    flush = close
+    read = next
+    readline = next
+    readlines = next
