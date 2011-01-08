@@ -35,7 +35,7 @@ try:
     range = xrange
 
 except:
-    pass
+    range = range
 
 
 # Reimplementation of execfile for Python 3.
