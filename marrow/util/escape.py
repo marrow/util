@@ -2,7 +2,9 @@
 
 import re
 
+
 __all__ = ['escape_slashes', 'escape_percents', 'unescape']
+
 
 
 escapes = re.compile(r'(\\[^\\]\([^\)]+\)|\\[^\\]|\\\\|%[^%][\w]?|%%|\$\([^\)]+\)|\$\$)')
@@ -47,6 +49,7 @@ escape_percents = dict(t="\t", r="\n", b=' ')
 
 # %xN - h=highlight - n=normal - f=flashing - u=underline - i=invert - 
 
+
 def unescape(caller, text, obj=None):
     gender = getattr(caller, 'gender', caller.get('gender', 'it'))[0] if caller else 'i'
     
@@ -65,6 +68,7 @@ def unescape(caller, text, obj=None):
             # l = ("#%d" % ( caller.location.id, )) if caller else '%l',
             # c = caller.properties['__last_command'] if caller and '__last_command' in caller.properties else '%c',
         )
+    
     local_percents['#'] = ("#%d" % ( caller.id, )) if caller else '%#'
     local_percents['@'] = local_percents['#']
     
