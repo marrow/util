@@ -8,7 +8,7 @@ from functools import partial
 
 from marrow.util.compat import binary, unicode
 
-__all__ = ['flatten', 'NoDefault', 'load_object', 'Cache', 'LoggingFile']
+__all__ = ['flatten', 'yield_property', 'yield_keyvalue', 'NoDefault', 'load_object', 'Cache', 'LoggingFile', 'CounterMeta']
 
 
 
@@ -32,6 +32,14 @@ def flatten(x):
                 yield els
         else:
             yield el
+
+
+def yield_property(iterable, name, default=None):
+    for i in iterable: yield getattr(i, name, default)
+
+
+def yield_keyvalue(iterable, key, default=None):
+    for i in iterable: yield i[key] if key in iterable else default
 
 
 class _NoDefault(object):
