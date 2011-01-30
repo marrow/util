@@ -59,6 +59,7 @@ class TestAttributeDictionary(TestCase):
         self.assertEqual(d1['foo.bar'], 1)
         self.assertEqual(d1.foo.bar, 1)
         
+        self.assertRaises(AttributeError, lambda: d1.bar.foo)
 
 
 class TestMultipleAttributeDictionary(TestCase):
