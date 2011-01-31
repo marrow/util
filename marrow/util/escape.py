@@ -56,20 +56,24 @@ def unescape(caller, text, obj=None):
     local_slashes = dict()
     
     local_percents = dict(
-            s = dict(m="he", f="she", i="it", g="they")[gender],        # subjective: he, she, it, they
-            o = dict(m="him", f="her", i="it", g="them")[gender],       # objective: him, her, it, them
-            p = dict(m="his", f="her", i="its", g="their")[gender],     # posessive: his, her, its, their
-            a = dict(m="his", f="hers", i="its", g="theirs")[gender],   # absolute posessive: his, hers, its, theirs
-            S = dict(m="He", f="She", i="It", g="They")[gender],        # subjective: he, she, it, they
-            O = dict(m="Him", f="Her", i="It", g="Them")[gender],       # objective: him, her, it, them
-            P = dict(m="His", f="Her", i="Its", g="Their")[gender],     # posessive: his, her, its, their
-            A = dict(m="His", f="Hers", i="Its", g="Theirs")[gender],   # absolute posessive: his, hers, its, theirs
-            N = caller.name if caller else 'Anonymous',
+            s = dict(m="he",      f="she",     i="it",     o="it",     n="ze",      s="e",      g="they")[gender],       # subjective
+            o = dict(m="him",     f="her",     i="it",     o="it",     n="hir",     s="em",     g="them")[gender],       # objective
+            v = dict(m="him",     f="her",     i="it",     o="it",     n="hir",     s="em",     g="them")[gender],       # partitive
+            p = dict(m="his",     f="her",     i="its",    o="its",    n="hir",     s="eir",    g="their")[gender],      # possessive adjective
+            a = dict(m="his",     f="hers",    i="its",    o="its",    n="hirs",    s="eirs",   g="theirs")[gender],     # possessive pronoun
+            f = dict(m="himself", f="herself", i="itself", o="itself", n="hirself", s="emself", g="themselves")[gender], # reflexive
+            S = dict(m="He",      f="She",     i="It",     o="It",     n="Ze",      s="E",      g="They")[gender],       # subjective
+            O = dict(m="Him",     f="Her",     i="It",     o="It",     n="Hir",     s="Em",     g="Them")[gender],       # objective
+            V = dict(m="Him",     f="Her",     i="It",     o="It",     n="Hir",     s="Em",     g="Them")[gender],       # partitive
+            P = dict(m="His",     f="Her",     i="Its",    o="Its",    n="Hir",     s="Eir",    g="Their")[gender],      # possessive adjective
+            A = dict(m="His",     f="Hers",    i="Its",    o="Its",    n="hirs",    s="Eirs",   g="Theirs")[gender],     # possessive pronoun
+            F = dict(m="His",     f="Hers",    i="Its",    o="Its",    n="Hirself", s="Emself", g="Theirs")[gender],     # reflexive
+            N = getattr(caller, 'name', caller.get('name', 'Anonymous')) if caller else 'Anonymous',
             # l = ("#%d" % ( caller.location.id, )) if caller else '%l',
             # c = caller.properties['__last_command'] if caller and '__last_command' in caller.properties else '%c',
         )
     
-    local_percents['#'] = ("#%d" % ( caller.id, )) if caller else '%#'
+    local_percents['#'] = ("#%s" % ( getattr(caller, 'id', caller.get('id', '%#')), )) if caller else '%#'
     local_percents['@'] = local_percents['#']
     
     def process(match):
