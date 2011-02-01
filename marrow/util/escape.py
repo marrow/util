@@ -57,17 +57,33 @@ def unescape(caller, text, obj=None):
     
     local_percents = dict(
             s = dict(m="he",      f="she",     i="it",     o="it",     n="ze",      s="e",      g="they")[gender],       # subjective
+                                                                                                                         #   second-person formal (you)
+                                                                                                                         #   second-person informal (thou)
             o = dict(m="him",     f="her",     i="it",     o="it",     n="hir",     s="em",     g="them")[gender],       # objective
+                                                                                                                         #   direct
+                                                                                                                         #   indirect
             v = dict(m="him",     f="her",     i="it",     o="it",     n="hir",     s="em",     g="them")[gender],       # partitive
-            p = dict(m="his",     f="her",     i="its",    o="its",    n="hir",     s="eir",    g="their")[gender],      # possessive adjective
-            a = dict(m="his",     f="hers",    i="its",    o="its",    n="hirs",    s="eirs",   g="theirs")[gender],     # possessive pronoun
+                                                                                                                         # first-person posessive adjective (my, our)
+                                                                                                                         # first-person posessive pronoun (mine, ours)
+            p = dict(m="his",     f="her",     i="its",    o="its",    n="hir",     s="eir",    g="their")[gender],      # third-person possessive adjective
+            a = dict(m="his",     f="hers",    i="its",    o="its",    n="hirs",    s="eirs",   g="theirs")[gender],     # third-person possessive pronoun
             f = dict(m="himself", f="herself", i="itself", o="itself", n="hirself", s="emself", g="themselves")[gender], # reflexive
+                                                                                                                         # inclusive we
+                                                                                                                         # exclusive we
+                                                                                                                         # reciprocal (each other)
+                                                                                                                         # prepositional (X and Y looked at _him_)
+                                                                                                                         # disjunctive (me)
+                                                                                                                         # demonstrative (this)
+                                                                                                                         # indefinite (some)
+                                                                                                                         # interrogative (who, which)
+            
             S = dict(m="He",      f="She",     i="It",     o="It",     n="Ze",      s="E",      g="They")[gender],       # subjective
             O = dict(m="Him",     f="Her",     i="It",     o="It",     n="Hir",     s="Em",     g="Them")[gender],       # objective
             V = dict(m="Him",     f="Her",     i="It",     o="It",     n="Hir",     s="Em",     g="Them")[gender],       # partitive
             P = dict(m="His",     f="Her",     i="Its",    o="Its",    n="Hir",     s="Eir",    g="Their")[gender],      # possessive adjective
             A = dict(m="His",     f="Hers",    i="Its",    o="Its",    n="hirs",    s="Eirs",   g="Theirs")[gender],     # possessive pronoun
             F = dict(m="Himself", f="Herself", i="Itself", o="Itself", n="Hirself", s="Emself", g="Themselves")[gender], # reflexive
+            
             N = getattr(caller, 'name', caller.get('name', 'Anonymous')) if caller else 'Anonymous',
             # l = ("#%d" % ( caller.location.id, )) if caller else '%l',
             # c = caller.properties['__last_command'] if caller and '__last_command' in caller.properties else '%c',
