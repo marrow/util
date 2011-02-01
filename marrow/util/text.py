@@ -52,3 +52,35 @@ def wrap(text, columns=78):
                 lines.append(oline)
     
     return "\n".join(lines)
+
+
+def rewrap(text, columns=78):
+    lines = []
+    
+    if isinstance(text, list):
+        in_paragraph = False
+        for line in text:
+            if not line:
+                in_paragraph = False
+                lines.append(line)
+                continue
+            
+            if in_paragraph:
+                lines[-1] = lines[-1] + ' ' + line
+                continue
+            
+            lines.append(line)
+            in_paragraph = True
+        
+        text = "\n".join(lines)
+        lines = []
+    
+    in_paragraph = True
+    for iline in text.splitlines():
+        if not iline:
+            lines.append(iline)
+        else:
+            for oline in wrap_(iline, columns):
+                lines.append(oline)
+    
+    return "\n".join(lines)
