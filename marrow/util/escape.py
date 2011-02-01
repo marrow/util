@@ -67,7 +67,7 @@ def unescape(caller, text, obj=None):
             V = dict(m="Him",     f="Her",     i="It",     o="It",     n="Hir",     s="Em",     g="Them")[gender],       # partitive
             P = dict(m="His",     f="Her",     i="Its",    o="Its",    n="Hir",     s="Eir",    g="Their")[gender],      # possessive adjective
             A = dict(m="His",     f="Hers",    i="Its",    o="Its",    n="hirs",    s="Eirs",   g="Theirs")[gender],     # possessive pronoun
-            F = dict(m="His",     f="Hers",    i="Its",    o="Its",    n="Hirself", s="Emself", g="Theirs")[gender],     # reflexive
+            F = dict(m="Himself", f="Herself", i="Itself", o="Itself", n="Hirself", s="Emself", g="Themselves")[gender], # reflexive
             N = getattr(caller, 'name', caller.get('name', 'Anonymous')) if caller else 'Anonymous',
             # l = ("#%d" % ( caller.location.id, )) if caller else '%l',
             # c = caller.properties['__last_command'] if caller and '__last_command' in caller.properties else '%c',
