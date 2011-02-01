@@ -48,6 +48,23 @@ class _NoDefault(object):
 NoDefault = _NoDefault()
 
 
+def merge(s, t):
+    """Merge dictionary t into s."""
+    
+    for k, v in t.items():
+        if isinstance(v, dict):
+            if k not in s:
+                s[k] = v
+                continue
+            
+            s[k] = merge(s[k], v)
+            continue
+        
+        s[k] = v
+    
+    return s
+
+
 def load_object(target):
     """This helper function loads an object identified by a dotted-notation string.
     
