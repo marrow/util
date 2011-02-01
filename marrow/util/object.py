@@ -182,7 +182,7 @@ class Cache(dict):
         self.head.previous = self.head = element
 
 
-class LoggingFile(object): # pragma: no cover
+class LoggingFile(object):
     """A write-only file-like object that redirects to the standard Python logging module."""
     
     def __init__(self, logger=None, level=logging.ERROR):
