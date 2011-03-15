@@ -42,9 +42,11 @@ class Bunch(dict):
         """Strip a prefix from the keys of another dictionary, returning a Bunch containing only valid key, value pairs."""
         match = prefix + "."
         
-        matches = cls([(key.lstrip(match), source[key]) for key in source if key.startswith(prefix)])
+        matches = cls([(key[len(match):], source[key]) for key in source if key.startswith(match)])
         
-        if not matches: raise ValueError('No values with the prefix ' + prefix + ' found.')
+        if not matches:
+            return cls()
+        
         return matches
 
 
