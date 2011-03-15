@@ -31,6 +31,7 @@ except: # pragma: no cover
         return unquote_(t.decode('iso-8859-1')).encode('iso-8859-1')
 
 
+# Range/xrange.
 try:
     range = xrange
 
@@ -157,7 +158,7 @@ def uvalues(a, encoding="iso-8859-1", fallback="iso-8859-1"):
         v = []
         
         for s in a:
-            v.apend(s.decode(fallback))
+            v.append(s.decode(fallback))
         
         return fallback, v
 
@@ -180,11 +181,3 @@ if sys.version_info < (3, 0):
     
 else: # pragma: no cover
     from cgi import parse_qsl
-
-
-# Range/xrange.
-if sys.version_info < (3, 0):
-    from __builtin__ import xrange
-
-else: # pragma: no cover
-    xrange = range
