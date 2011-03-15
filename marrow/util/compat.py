@@ -3,14 +3,18 @@
 
 """Compatability features.
 
-Python 2.5 is the minimum version supported by Marrow, and great effort is being made to support Python 3.x.
+Python 2.5 is the minimum version supported by Marrow, and great effort is
+being made to support Python 3.x.
 """
 
 from __future__ import with_statement
-import sys, traceback
+import sys
+import traceback
 
 
-__all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary', 'unicode', 'bytestring', 'native', 'uvalues', 'IO', 'parse_qsl']
+__all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary',
+           'unicode', 'bytestring', 'native', 'unicodestr', 'uvalues', 'IO',
+           'parse_qsl']
 
 
 try: # pragma: no cover
@@ -25,9 +29,11 @@ try:
 
 except: # pragma: no cover
     from urllib.parse import unquote_plus as unquote_
-    
+
     def unquote(t):
-        """Python 3 requires unquote to be passed unicode, but unicode characters may be encoded using quoted bytes!"""
+        """Python 3 requires unquote to be passed unicode, but unicode
+        characters may be encoded using quoted bytes!
+        """
         return unquote_(t.decode('iso-8859-1')).encode('iso-8859-1')
 
 
@@ -40,18 +46,18 @@ except:
 
 
 # Reimplementation of execfile for Python 3.
-if sys.version_info >= (3,0): # pragma: no cover
+if sys.version_info >= (3, 0): # pragma: no cover
     def execfile(filename, globals_=None, locals_=None):
         if globals_ is None:
             globals_ = globals()
-        
+
         if locals_ is None:
             locals_ = globals_
-        
-        exec(compile(open(filename).read(), filename, 'exec'), globals_, locals_)
+
+        exec(open(filename).read(), globals_, locals_)
 
 else:
-    from __builtin__ import execfile
+    execfile = execfile
 
 
 def exception(maxTBlevel=None):
@@ -66,27 +72,28 @@ def exception(maxTBlevel=None):
     * formatted: formatted traceback
     * args: arguments to the exception instance
     
-    This functionality allows you to trap an exception in a method agnostic to differences between Python 2.x and 3.x.
+    This functionality allows you to trap an exception in a method agnostic to
+    differences between Python 2.x and 3.x.
     """
-    
+
     try:
         from marrow.util.bunch import Bunch
-    
+
         cls, exc, trbk = sys.exc_info()
         excName = cls.__name__
         excArgs = getattr(exc, 'args', None)
-    
+
         excTb = ''.join(traceback.format_exception(cls, exc, trbk, maxTBlevel))
-    
+
         return Bunch(
-                name = excName,
-                cls = cls,
-                exception = exc,
-                trace = trbk,
-                formatted = excTb,
-                args = excArgs
+                name=excName,
+                cls=cls,
+                exception=exc,
+                trace=trbk,
+                formatted=excTb,
+                args=excArgs
             )
-    
+
     finally:
         del cls, exc, trbk
 
@@ -105,62 +112,55 @@ else: # pragma: no cover
     unicode = unicode
 
 
-def bytestring(s, encoding="iso-8859-1", fallback="iso-8859-1"):
+def bytestring(s, encoding='utf-8', fallback='iso-8859-1'):
     """Convert a given string into a bytestring."""
-    
-    if not isinstance(s, unicode):
+
+    if isinstance(s, bytes):
         return s
-    
+
     try:
-        s.encode(encoding)
-    
+        return s.encode(encoding)
+
     except UnicodeError:
-        s.encode(fallback)
+        return s.encode(fallback)
 
 
-def native(s, encoding="iso-8859-1", fallback="iso-8859-1"):
+def native(s, encoding='utf-8', fallback='iso-8859-1'):
     """Convert a given string into a native string."""
-    
+
     if isinstance(s, str):
         return s
-    
-    if str is unicode:
-        try:
-            return s.decode(encoding)
-        
-        except UnicodeError:
-            if fallback is None: raise
-            return s.decode(fallback)
-    
+
+    if str is unicode:  # Python 3.x ->
+        return bytestring(s, encoding, fallback)
+
+    return unicodestr(s, encoding, fallback)
+
+
+def unicodestr(s, encoding='utf-8', fallback='iso-8859-1'):
+    """Convert a string to unicode if it isn't already."""
+
+    if isinstance(s, unicode):
+        return s
+
     try:
         return s.decode(encoding)
-    
     except UnicodeError:
-        if fallback is None: raise
         return s.decode(fallback)
 
 
-def uvalues(a, encoding="iso-8859-1", fallback="iso-8859-1"):
+def uvalues(a, encoding='utf-8', fallback='iso-8859-1'):
     """Return a list of decoded values from an iterator.
     
-    If any of the values fail to decode, re-decode all values using the fallback.
+    If any of the values fail to decode, re-decode all values using the
+    fallback.
     """
-    
+
     try:
-        v = []
-        
-        for s in a:
-            v.append(s.decode(encoding))
-        
-        return encoding, v
-    
+        return encoding, [s.decode(encoding) for s in a]
+
     except UnicodeError:
-        v = []
-        
-        for s in a:
-            v.append(s.decode(fallback))
-        
-        return fallback, v
+        return fallback, [s.decode(fallback) for s in a]
 
 
 # In-memory binary stream representation for Python 2.5 or 2.6+.
@@ -170,7 +170,7 @@ if sys.version_info >= (2, 6):
 else: # pragma: no cover
     try:
         from cStringIO import cStringIO as IO
-    
+
     except ImportError:
         from StringIO import StringIO as IO
 
@@ -178,6 +178,6 @@ else: # pragma: no cover
 # Query string parsing.
 if sys.version_info < (3, 0):
     from urlparse import parse_qsl
-    
+
 else: # pragma: no cover
     from cgi import parse_qsl
