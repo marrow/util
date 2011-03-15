@@ -17,7 +17,7 @@ __all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary',
            'parse_qsl']
 
 
-try: # pragma: no cover
+try:  # pragma: no cover
     from email.utils import formatdate
 
 except ImportError:
@@ -27,7 +27,7 @@ except ImportError:
 try:
     from urllib import unquote_plus as unquote
 
-except: # pragma: no cover
+except:  # pragma: no cover
     from urllib.parse import unquote_plus as unquote_
 
     def unquote(t):
@@ -46,7 +46,7 @@ except:
 
 
 # Reimplementation of execfile for Python 3.
-if sys.version_info >= (3, 0): # pragma: no cover
+if sys.version_info >= (3, 0):  # pragma: no cover
     def execfile(filename, globals_=None, locals_=None):
         if globals_ is None:
             globals_ = globals()
@@ -62,16 +62,16 @@ else:
 
 def exception(maxTBlevel=None):
     """Retrieve useful information about an exception.
-    
+
     Returns a bunch (attribute-access dict) with the following information:
-    
+
     * name: exception class name
     * cls: the exception class
     * exception: the exception instance
     * trace: the traceback instance
     * formatted: formatted traceback
     * args: arguments to the exception instance
-    
+
     This functionality allows you to trap an exception in a method agnostic to
     differences between Python 2.x and 3.x.
     """
@@ -103,11 +103,11 @@ if sys.version_info >= (2, 6) and sys.version_info < (3, 0):
     binary = bytes
     unicode = unicode
 
-elif sys.version_info >= (3, 0): # pragma: no cover
+elif sys.version_info >= (3, 0):  # pragma: no cover
     binary = bytes
     unicode = str
 
-else: # pragma: no cover
+else:  # pragma: no cover
     binary = str
     unicode = unicode
 
@@ -132,9 +132,9 @@ def native(s, encoding='utf-8', fallback='iso-8859-1'):
         return s
 
     if str is unicode:  # Python 3.x ->
-        return bytestring(s, encoding, fallback)
+        return unicodestr(s, encoding, fallback)
 
-    return unicodestr(s, encoding, fallback)
+    return bytestring(s, encoding, fallback)
 
 
 def unicodestr(s, encoding='utf-8', fallback='iso-8859-1'):
@@ -151,7 +151,7 @@ def unicodestr(s, encoding='utf-8', fallback='iso-8859-1'):
 
 def uvalues(a, encoding='utf-8', fallback='iso-8859-1'):
     """Return a list of decoded values from an iterator.
-    
+
     If any of the values fail to decode, re-decode all values using the
     fallback.
     """
@@ -167,7 +167,7 @@ def uvalues(a, encoding='utf-8', fallback='iso-8859-1'):
 if sys.version_info >= (2, 6):
     from io import BytesIO as IO
 
-else: # pragma: no cover
+else:  # pragma: no cover
     try:
         from cStringIO import cStringIO as IO
 
@@ -179,5 +179,5 @@ else: # pragma: no cover
 if sys.version_info < (3, 0):
     from urlparse import parse_qsl
 
-else: # pragma: no cover
+else:  # pragma: no cover
     from cgi import parse_qsl
