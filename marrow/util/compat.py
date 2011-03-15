@@ -17,36 +17,25 @@ __all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary',
            'parse_qsl']
 
 
-try:  # pragma: no cover
-    from email.utils import formatdate
-
-except ImportError:
+if sys.version_info < (3, 0):  
     from rfc822 import formatdate
-
-
-try:
     from urllib import unquote_plus as unquote
-
-except:  # pragma: no cover
-    from urllib.parse import unquote_plus as unquote_
-
-    def unquote(t):
-        """Python 3 requires unquote to be passed unicode, but unicode
-        characters may be encoded using quoted bytes!
-        """
-        return unquote_(t.decode('iso-8859-1')).encode('iso-8859-1')
-
-
-# Range/xrange.
-try:
+    from urlparse import parse_qsl
+    basestring = basestring
+    binary = bytes = str
+    unicode = unicode
     range = xrange
+    execfile = execfile
 
-except:
+else:  # pragma: no cover
+    from email.utils import formatdate
+    from urllib.parse import unquote_plus as unquote_
+    from cgi import parse_qsl
+    basestring = str
+    binary = bytes = bytes
+    unicode = str
     range = range
 
-
-# Reimplementation of execfile for Python 3.
-if sys.version_info >= (3, 0):  # pragma: no cover
     def execfile(filename, globals_=None, locals_=None):
         if globals_ is None:
             globals_ = globals()
@@ -56,8 +45,11 @@ if sys.version_info >= (3, 0):  # pragma: no cover
 
         exec(open(filename).read(), globals_, locals_)
 
-else:
-    execfile = execfile
+    def unquote(t):
+        """Python 3 requires unquote to be passed unicode, but unicode
+        characters may be encoded using quoted bytes!
+        """
+        return unquote_(t.decode('iso-8859-1')).encode('iso-8859-1')
 
 
 def exception(maxTBlevel=None):
@@ -96,20 +88,6 @@ def exception(maxTBlevel=None):
 
     finally:
         del cls, exc, trbk
-
-
-# Binary and Unicode representations for Python 2.5, 2.6+, or 3.x.
-if sys.version_info >= (2, 6) and sys.version_info < (3, 0):
-    binary = bytes
-    unicode = unicode
-
-elif sys.version_info >= (3, 0):  # pragma: no cover
-    binary = bytes
-    unicode = str
-
-else:  # pragma: no cover
-    binary = str
-    unicode = unicode
 
 
 def bytestring(s, encoding='utf-8', fallback='iso-8859-1'):
@@ -173,11 +151,3 @@ else:  # pragma: no cover
 
     except ImportError:
         from StringIO import StringIO as IO
-
-
-# Query string parsing.
-if sys.version_info < (3, 0):
-    from urlparse import parse_qsl
-
-else:  # pragma: no cover
-    from cgi import parse_qsl
