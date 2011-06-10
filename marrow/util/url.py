@@ -199,6 +199,9 @@ class URL(object):
         result = urlparse(url)
         
         self.scheme = result.scheme or self.scheme
+        
+        result = urlparse(url.replace(self.scheme + '://', 'http://'))
+        
         self.user = result.username or self.user
         self.password = result.password or self.password
         self.host = result.hostname or self.host
