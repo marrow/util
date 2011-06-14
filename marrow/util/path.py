@@ -21,6 +21,9 @@ class Path(collections.deque):
     def _assign(self, value):
         self.clear()
         
+        if value is None:
+            return
+        
         if isinstance(value, (binary, unicode)):
             self.extend(unicode(value).split(self.separator))
             return
