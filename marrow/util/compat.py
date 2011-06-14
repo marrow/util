@@ -18,7 +18,7 @@ __all__ = ['formatdate', 'unquote', 'range', 'execfile', 'exception', 'binary',
 
 
 if sys.version_info < (3, 0):  
-    from rfc822 import formatdate
+    from email.utils import formatdate # DEPRECATE
     from urllib import unquote_plus as unquote
     from urlparse import parse_qsl
     basestring = basestring
@@ -28,7 +28,7 @@ if sys.version_info < (3, 0):
     execfile = execfile
 
 else:  # pragma: no cover
-    from email.utils import formatdate
+    from email.utils import formatdate # DEPRECATE
     from urllib.parse import unquote_plus as unquote_
     from cgi import parse_qsl
     basestring = str
