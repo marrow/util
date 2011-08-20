@@ -218,7 +218,7 @@ class URL(object):
         parts.append(self.user or "")
         parts.append((":" + self.password) if self.user else ("@" if self.user else ""))
         parts.append(self.host or "")
-        parts.append((":" + self.port) if self.port else "")
+        parts.append((":" + str(self.port)) if self.port else "")
         parts.append(unicode(self.path) or "/")
         parts.append((";" + unicode(self.params)) if self.params else "")
         parts.append(("?" + unicode(self.query)) if self.query else "")
