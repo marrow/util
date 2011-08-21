@@ -5,32 +5,32 @@ from __future__ import print_function
 
 try:
     from urlparse import urlparse
-    from urllib2 import urlopen
+    from urllib import quote_plus, unquote_plus
 
 except ImportError:
-    from urllib.parse import urlparse
-    from urllib import urlopen
+    from urllib.parse import urlparse, quote_plus, unquote_plus
 
 from marrow.util.compat import basestring, native, unicode, bytestring, unicodestr as unicodestring
 from marrow.util.path import Path
 from marrow.util.object import NoDefault
 
 
-# TODO: This doesn't handle multiple instances of the same key.
-# TODO: URL-decode the arguments.
+
 class QueryString(object):
-    def __init__(self, q=None, assignment="=", separator="&"):
+    def __init__(self, q=None, assignment="=", separator="&", encoded=True):
         self._l = list()
         self._d = dict()
         self.assignment = assignment
         self.separator = separator
         
         if q is not None:
-            self.update(q)
+            self.update(q, __encoded=encoded)
     
     def update(self, __value=None, *args, **kw):
         if __value is None:
             return
+        
+        __encoded = kw.pop('__encoded', False)
         
         if isinstance(__value, tuple):
             args = [__value] + list(args)
@@ -60,6 +60,10 @@ class QueryString(object):
                     del self._d[i]
                 
                 continue
+            
+            if __encoded:
+                name = unquote_plus(name)
+                value = unquote_plus(value)
             
             if name not in self._l:
                 self._l.append(name)
@@ -121,7 +125,19 @@ class QueryString(object):
         self.update([(x, None)])
     
     def render(self):
-        return self.separator.join([(i + self.assignment + self._d[i]) for i in self._l])
+        parts = []
+        
+        for i in self._l:
+            v = self._d[i]
+            i = quote_plus(i)
+            
+            if not isinstance(v, list):
+                v = [v]
+            
+            for e in v:
+                parts.append(i + self.assignment + quote_plus(e))
+        
+        return self.separator.join(parts)
     
     def __str__(self):
         return native(self.render())
@@ -222,7 +238,7 @@ class URL(object):
         parts.append(unicode(self.path) or "/")
         parts.append((";" + unicode(self.params)) if self.params else "")
         parts.append(("?" + unicode(self.query)) if self.query else "")
-        parts.append(("#" + self.fragment) if self.fragment else "")
+        parts.append(("#" + quote_plus(self.fragment)) if self.fragment else "")
         
         return "".join(parts)
     
@@ -234,10 +250,3 @@ class URL(object):
     
     def __unicode__(self):
         return self.render()
-    
-    def open(self, timeout=None):
-        if self.scheme == 'file':
-            return open(self.path, self.query.get('mode', 'r'))
-        
-        return urlopen(native(self.render()))
-    
