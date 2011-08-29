@@ -61,16 +61,13 @@ class NamedTuple(tuple):
         return cls(*values)
     
     def _replace(self, **kwds):
-        'Return a new Requirement object replacing specified fields with new values'
+        'Return a new NamedTuple object replacing specified fields with new values'
         result = self._make(map(kwds.pop, self._fields, self))
         
         if kwds:
             raise ValueError('Got unexpected field names: %r' % kwds.keys())
         
         return result
-    
-    def __getnewargs__(self):
-        return tuple(self)
     
     def __getattr__(self, name):
         if name not in self._fields:
@@ -86,3 +83,45 @@ class NamedTuple(tuple):
     
     def keys(self):
         return self._fields
+    
+    # The following are pseudo set operations.
+    
+    def __or__(self, other):
+        """Combine tuples, with values from self overriding ones from other."""
+        
+        if type(self) != type(other):
+            raise TypeError("Can not merge dissimilar types.")
+        
+        data = other.as_dict()
+        
+        for i in self._fields:
+            if self[i] is None:
+                continue
+            
+            data[i] = self[i]
+        
+        return self.__class__(**data)
+    
+    # The following operations only work on fully numeric NamedTuple instances.
+    
+    def __add__(self, other):
+        if type(self) != type(other):
+            raise TypeError("Can not add dissimilar types.")
+        
+        v = []
+        
+        for n in self._fields:
+            v.append(((self[n] or 0) + (other[n] or 0)) or None)
+        
+        return self.__class__(*v)
+    
+    def __neg__(self):
+        data = self.as_dict()
+        
+        for i in data:
+            if data[i] is None:
+                continue
+            
+            data[i] = -data[i]
+        
+        return self.__class__(**data)
