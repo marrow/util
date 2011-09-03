@@ -12,15 +12,15 @@ NORMALIZE_EXPRESSION = re.compile('\W+')
 
 
 
-def normalize(name, collection=[]):
-    base = NORMALIZE_EXPRESSION.sub('-', name.lower())
+def normalize(name, collection=[], replacement='-'):
+    base = NORMALIZE_EXPRESSION.sub(replacement, name.lower())
     suffix = 0
     
     while True:
-        if ("%s%s" % (base.strip('-'), ("-%d" % (suffix, )) if suffix else "")) not in collection: break
+        if ("%s%s" % (base.strip(replacement), ("%s%d" % (replacement, suffix)) if suffix else "")) not in collection: break
         suffix += 1
     
-    return ("%s%s" % (base.strip('-'), ("-%d" % (suffix, )) if suffix else ""))
+    return ("%s%s" % (base.strip(replacement), ("%s%d" % (replacement, suffix)) if suffix else ""))
 
 
 def ellipsis(text, length, symbol="..."):

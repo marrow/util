@@ -9,7 +9,7 @@ import inspect
 from marrow.util.compat import binary, unicode
 
 
-__all__ = ['boolean', 'array', 'KeywordProcessor', 'Path', 'tags', 'terms']
+__all__ = ['boolean', 'array', 'integer', 'number', 'KeywordProcessor', 'tags', 'terms']
 
 
 
@@ -47,19 +47,17 @@ def boolean(input):
     """
     
     try:
-        input = input.lower()
-    
+        input = input.strip().lower()
     except AttributeError:
         return bool(input)
-
+    
     if input in ('yes', 'y', 'on', 'true', 't', '1'):
         return True
-
+    
     if input in ('no', 'n', 'off', 'false', 'f', '0'):
         return False
     
-    raise ValueError("Unable to convert " + input + " to a boolean value.")
-    
+    raise ValueError("Unable to convert {0!r} to a boolean value.".format(input))
 
 
 def array(input, separator=',', strip=True, empty=False):
@@ -118,6 +116,45 @@ def array(input, separator=',', strip=True, empty=False):
         return [i for i in [i.strip() for i in input.split(separator)] if i]
     
     return [i.strip() for i in input.split(separator)]
+
+
+def integer(input):
+    """Convert the given input to an integer value.
+    
+    :param input: the value to convert to an integer
+    :type input: any
+    
+    :returns: converted integer value
+    :rtype: int
+    """
+    
+    try:
+        return int(input)
+    except (TypeError, ValueError):
+        raise ValueError("Unable to convert {0!r} to an integer value.".format(input))
+
+
+def number(input):
+    """Convert the given input to a floating point or integer value.
+    
+    In cases of ambiguity, integers will be prefered to floating point.
+    
+    :param input: the value to convert to a number
+    :type input: any
+    
+    :returns: converted integer value
+    :rtype: float or int
+    """
+    
+    try:
+        return int(input)
+    except (TypeError, ValueError):
+        pass
+    
+    try:
+        return float(input)
+    except (TypeError, ValueError):
+        raise ValueError("Unable to convert {0!r} to a number.".format(obj))
 
 
 class KeywordProcessor(object):
