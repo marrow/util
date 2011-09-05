@@ -3,6 +3,7 @@
 """Object instance and class helper functions."""
 
 import logging
+import inspect
 
 from functools import partial
 
