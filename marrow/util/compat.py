@@ -7,7 +7,6 @@ Python 2.5 is the minimum version supported by Marrow, and great effort is
 being made to support Python 3.x.
 """
 
-from __future__ import with_statement
 import sys
 import traceback
 
@@ -90,17 +89,23 @@ def exception(maxTBlevel=None):
         del cls, exc, trbk
 
 
-def bytestring(s, encoding='utf-8', fallback='iso-8859-1'):
-    """Convert a given string into a bytestring."""
-
-    if isinstance(s, bytes):
-        return s
-
+def bytestring(v, encoding='utf-8', fallback='iso-8859-1', errors='strict'):
+    """Convert a given value into a bytestring.
+    
+    If the value is a unicode string that contains non-ascii characters,
+    will attempt to encode it using the given encoding, using the given
+    errors strategy (which is the same as for the unicode encode method).
+    If errors is 'strict' (the default), and encoding fails, try again
+    with the fallback encoding.
+    """
     try:
-        return s.encode(encoding)
-
+        return bytes(v)
     except UnicodeError:
-        return s.encode(fallback)
+        # unicode value has non-ascii characters:
+        try:
+            return v.encode(encoding, errors)
+        except UnicodeError:
+            return v.encode(fallback)
 
 
 def native(s, encoding='utf-8', fallback='iso-8859-1'):
@@ -115,16 +120,26 @@ def native(s, encoding='utf-8', fallback='iso-8859-1'):
     return bytestring(s, encoding, fallback)
 
 
-def unicodestr(s, encoding='utf-8', fallback='iso-8859-1'):
-    """Convert a string to unicode if it isn't already."""
+def unicodestr(v, encoding='utf-8', fallback='iso-8859-1', errors='strict'):
+    """Convert a value to unicode if it isn't already.
+    
+    Attempts to decode bytestrings (or values with a bytestring, but no
+    unicode, representation) using the given encoding.
 
-    if isinstance(s, unicode):
-        return s
-
+    The errors strategy is the same as for the bytestring decode method.
+    If errors is 'strict' (the default), and decoding fails, try again
+    with the fallback encoding.
+    """
     try:
-        return s.decode(encoding)
+        return unicode(v)
     except UnicodeError:
-        return s.decode(fallback)
+        # bytestring value has non-ascii characters:
+        v = bytes(v)
+
+        try:
+            return v.decode(encoding, errors)
+        except UnicodeError:
+            return v.decode(fallback)
 
 
 def uvalues(a, encoding='utf-8', fallback='iso-8859-1'):

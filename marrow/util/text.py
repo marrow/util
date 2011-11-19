@@ -3,6 +3,8 @@
 """Text processing helper functions."""
 
 import re
+import unicodedata
+from marrow.util.compat import unicodestr
 
 
 __all__ = ['normalize', 'ellipsis', 'wrap']
@@ -13,7 +15,8 @@ NORMALIZE_EXPRESSION = re.compile('\W+')
 
 
 def normalize(name, collection=[], replacement='-'):
-    base = NORMALIZE_EXPRESSION.sub(replacement, name.lower())
+    base = NORMALIZE_EXPRESSION.sub(replacement,
+            unicodedata.normalize('NFKD', unicodestr(name)).lower().encode('ascii', 'ignore'))
     suffix = 0
     
     while True:
