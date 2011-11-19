@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+from __future__ import unicode_literals
+
 from unittest import TestCase
 
 from marrow.util.text import *
@@ -12,7 +14,8 @@ NORMALIZE_BASIC_PAIRS = [
         ('Hello world', 'hello-world'),
         ('Bad  String', 'bad-string'),
         ('Test', 'test-2'),
-        ('foo', 'foo')
+        ('foo', 'foo'),
+        ('montréal', 'montreal')
     ]
 
 
