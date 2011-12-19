@@ -45,7 +45,7 @@ class Bunch(dict):
         matches = cls([(key[len(match):], source[key]) for key in source if key.startswith(match)])
         
         if not matches:
-            return cls()
+            raise ValueError()
         
         return matches
 

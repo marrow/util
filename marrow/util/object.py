@@ -3,6 +3,7 @@
 """Object instance and class helper functions."""
 
 import logging
+import inspect
 
 from functools import partial
 
@@ -71,7 +72,7 @@ def load_object(target):
     For example:
     
         # Load class Foo from example.objects
-        get_dotted_object('example.objects:Foo')
+        load_object('example.objects:Foo')
     """
     parts, target = target.split(':') if ':' in target else (target, None)
     module = __import__(parts)
