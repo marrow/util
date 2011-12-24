@@ -7,7 +7,6 @@ Python 2.5 is the minimum version supported by Marrow, and great effort is
 being made to support Python 3.x.
 """
 
-from __future__ import with_statement
 import sys
 import traceback
 
@@ -90,15 +89,20 @@ def exception(maxTBlevel=None):
         del cls, exc, trbk
 
 
-def bytestring(s, encoding='utf-8', fallback='iso-8859-1'):
-    """Convert a given string into a bytestring."""
-
+def bytestring(s, encoding='utf-8', fallback='iso-8859-1', errors='strict'):
+    """Convert a given string into a bytestring.
+    
+    If the string is a unicode string that contains non-ascii characters,
+    will attempt to encode it using the given encoding, using the given
+    errors strategy (which is the same as for the unicode encode method).
+    If errors is 'strict' (the default), and encoding fails, will try again
+    with the fallback encoding.
+    """
     if isinstance(s, bytes):
         return s
 
     try:
-        return s.encode(encoding)
-
+        return s.encode(encoding, errors)
     except UnicodeError:
         return s.encode(fallback)
 
@@ -115,14 +119,21 @@ def native(s, encoding='utf-8', fallback='iso-8859-1'):
     return bytestring(s, encoding, fallback)
 
 
-def unicodestr(s, encoding='utf-8', fallback='iso-8859-1'):
-    """Convert a string to unicode if it isn't already."""
+def unicodestr(s, encoding='utf-8', fallback='iso-8859-1', errors='strict'):
+    """Convert a string to unicode if it isn't already.
+    
+    Attempts to decode bytestrings (or values with a bytestring, but no
+    unicode, representation) using the given encoding.
 
+    The errors strategy is the same as for the bytestring decode method.
+    If errors is 'strict' (the default), and decoding fails, try again
+    with the fallback encoding.
+    """
     if isinstance(s, unicode):
         return s
 
     try:
-        return s.decode(encoding)
+        return s.decode(encoding, errors)
     except UnicodeError:
         return s.decode(fallback)
 

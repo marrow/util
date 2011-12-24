@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from __future__ import unicode_literals
 import sys
 from unittest import TestCase
 
@@ -69,3 +70,75 @@ class TestIO(TestCase):
         self.failUnless(isinstance(value, compat.binary))
         
         self.assertRaises(TypeError, lambda: compat.IO(uchar()))
+
+
+class TestStringConversion(TestCase):
+    # unicodestr:
+
+    def test_convert_unicode_to_unicode(self):
+        input = 'unicode'
+        u = compat.unicodestr(input)
+        # assert good performance:
+        assert u is input
+
+    def test_convert_bytestring_to_unicode(self):
+        u = compat.unicodestr(b'bytestring')
+        self.assertEqual(u, 'bytestring')
+        self.failUnless(isinstance(u, compat.unicode))
+
+    def test_convert_utf8_bytestring_to_unicode(self):
+        expected = 'utf-8 bytestring with non-ascii characters £∫é≈Ω'
+        b = expected.encode('utf-8')
+        u = compat.unicodestr(b)
+        # test default encoding:
+        self.assertEqual(compat.unicodestr(b, encoding='utf-8'), u)
+        self.assertEqual(u, expected)
+        self.failUnless(isinstance(u, compat.unicode))
+
+    def test_convert_latin1_bytestring_to_unicode(self):
+        expected = 'latin-1 bytestring with non-ascii characters é'
+        b = expected.encode('iso-8859-1')
+        # test default fallback encoding:
+        self.assertEqual(compat.unicodestr(b, encoding='iso-8859-1'), expected)
+        u = compat.unicodestr(b)
+        self.assertEqual(u, expected)
+        self.failUnless(isinstance(u, compat.unicode))
+
+    def test_unicode_fails_on_non_strings(self):
+        self.assertRaises(AttributeError, compat.unicodestr, 3)
+        self.assertRaises(AttributeError, compat.unicodestr, [])
+
+    # bytestring:
+
+    def test_convert_bytestring_to_bytestring(self):
+        input = b'bytestring'
+        b = compat.bytestring(input)
+        # assert good performance:
+        assert b is input
+
+    def test_convert_unicode_to_bytestring(self):
+        b = compat.bytestring('unicode')
+        self.assertEqual(b, b'unicode')
+        self.failUnless(isinstance(b, compat.bytes))
+
+    def test_convert_unicode_to_utf8_bytestring(self):
+        u = 'unicode with non-ascii characters ∂åé≠∆'
+        expected = u.encode('utf-8')
+        b = compat.bytestring(u)
+        self.assertEqual(b, expected)
+        self.failUnless(isinstance(b, compat.bytes))
+
+    def test_convert_unicode_to_latin1_bytestring(self):
+        u = 'unicode with non-ascii character é'
+        expected = u.encode('iso-8859-1')
+        b = compat.bytestring(u, 'iso-8859-1')
+        self.assertEqual(b, expected)
+        self.failUnless(isinstance(b, compat.bytes))
+
+    def test_bytestring_fails_on_non_strings(self):
+        self.assertRaises(AttributeError, compat.bytestring, 4)
+        self.assertRaises(AttributeError, compat.bytestring, [])
+
+    def test_bytestring_fallback(self):
+        u = '\xa1'
+        self.assertRaises(UnicodeError, compat.bytestring, u, 'iso-8859-2', fallback='iso-8859-2')
