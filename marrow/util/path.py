@@ -19,6 +19,7 @@ __all__ = ['Path']
 class Path(collections.deque):
     def __init__(self, value=None, separator='/', encoded=False):
         self.separator = unicode(separator)
+        self.encoded = encoded
         
         super(Path, self).__init__()
         
@@ -41,7 +42,7 @@ class Path(collections.deque):
         self._assign(value)
 
     def __str__(self):
-        return self.separator.join(quote_plus(i) for i in self)
+        return self.separator.join((quote_plus(i)  if self.encoded else i) for i in self)
 
     def __unicode__(self):
         return unicode(self.separator).join(self)

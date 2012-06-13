@@ -7,7 +7,7 @@ from marrow.util.compat import binary, unicode
 from marrow.util.path import Path
 
 
-if sys.version_info >= (3, 0):
+if sys.version_info[:2] >= (3, 0):
     from uni_compat3 import path_cases
 
 else:

@@ -1,13 +1,17 @@
 # encoding: utf-8
 
+import os
+
+if not os.getcwd().endswith('tests'):
+    os.chdir('tests')
+
 import sys
 from unittest import TestCase
-
 
 from marrow.util import compat
 
 
-if sys.version_info >= (3, 0):
+if sys.version_info[:2] >= (3, 0):
     from uni_compat3 import uchar
 
 else:
@@ -25,7 +29,8 @@ class TestPy3K(TestCase):
             
             self.assertEquals(exc.name, 'ZeroDivisionError')
             self.assertEquals(exc.cls, ZeroDivisionError)
-            self.assertTrue('division or modulo by zero' in exc.args[0])
+            self.assertIn('division', exc.args[0])
+            self.assertIn('by zero', exc.args[0])
         
         try:
             raise Exception('foo', 1)

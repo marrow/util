@@ -6,7 +6,7 @@ from unittest import TestCase
 from marrow.util import convert as conv
 
 
-if sys.version_info >= (3, 0):
+if sys.version_info[:2] >= (3, 0):
     from uni_compat3 import uchar
 
 else:
