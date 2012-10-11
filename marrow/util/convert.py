@@ -154,7 +154,7 @@ def number(input):
     try:
         return float(input)
     except (TypeError, ValueError):
-        raise ValueError("Unable to convert {0!r} to a number.".format(obj))
+        raise ValueError("Unable to convert {0!r} to a number.".format(input))
 
 
 class KeywordProcessor(object):
