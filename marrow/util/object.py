@@ -11,9 +11,6 @@ from functools import partial
 
 from marrow.util.compat import binary, unicode
 
-__all__ = ['flatten', 'yield_property', 'yield_keyvalue', 'NoDefault', 'load_object', 'Cache', 'LoggingFile', 'CounterMeta']
-
-
 
 def flatten(x):
     """flatten(sequence) -> list
@@ -309,3 +306,23 @@ def getargspec(obj):
         # del argnames[-len(_defaults):]
 
     return argnames, defaults, True if varargs else False, True if varkw else False
+
+
+class RichComparisonMixin(object):
+    def __eq__(self, other):
+        raise NotImplementedError("Equality not implemented")
+
+    def __lt__(self, other):
+        raise NotImplementedError("Less than not implemented")
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __gt__(self, other):
+        return not (self.__lt__(other) or self.__eq__(other))
+
+    def __le__(self, other):
+        return self.__eq__(other) or self.__lt__(other)
+
+    def __ge__(self, other):
+        return self.__eq__(other) or self.__gt__(other)
