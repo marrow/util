@@ -11,6 +11,11 @@ from functools import partial
 
 from marrow.util.compat import binary, unicode
 
+try:
+    from inspect import getfullargspec as _getargspec
+except ImportError: # pragma: no cover
+    from inspect import getargspec as _getargspec
+
 
 def flatten(x):
     """flatten(sequence) -> list
@@ -267,17 +272,17 @@ def getargspec(obj):
     argnames, varargs, varkw, _defaults = None, None, None, None
 
     if inspect.isfunction(obj) or inspect.ismethod(obj):
-        argnames, varargs, varkw, _defaults = inspect.getargspec(obj)
+        argnames, varargs, varkw, _defaults = _getargspec(obj)[:4]
 
     elif inspect.isclass(obj):
         if inspect.ismethoddescriptor(obj.__init__):
             argnames, varargs, varkw, _defaults = [], False, False, None
 
         else:
-            argnames, varargs, varkw, _defaults = inspect.getargspec(obj.__init__)
+            argnames, varargs, varkw, _defaults = _getargspec(obj.__init__)[:4]
 
     elif hasattr(obj, '__call__'):
-        argnames, varargs, varkw, _defaults = inspect.getargspec(obj.__call__)
+        argnames, varargs, varkw, _defaults = _getargspec(obj.__call__)[:4]
 
     else:
         raise TypeError("Object not callable?")
