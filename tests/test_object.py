@@ -16,9 +16,49 @@ class TestOOUtils(TestCase):
             )
     
     def test_load_object(self):
-        self.failUnless(load_object('marrow.util.bunch:Bunch') is Bunch)
+        self.assertTrue(load_object('marrow.util.bunch:Bunch') is Bunch)
         self.assertRaises(AttributeError, lambda: load_object('marrow.util.bunch:Foo'))
         self.assertRaises(ImportError, lambda: load_object('marrow.foo:Bar'))
+
+    def test_load_object_entry_point(self):
+        from marrow.util import object as object_module
+
+        expected = object()
+
+        class EntryPoint:
+            name = 'sample'
+
+            def load(self):
+                return expected
+
+        class EntryPoints(list):
+            def select(self, **filters):
+                self.filters = filters
+                return self
+
+        points = EntryPoints([EntryPoint()])
+        original = object_module.entry_points
+        object_module.entry_points = lambda: points
+        try:
+            self.assertIs(load_object('sample', 'example.plugins'), expected)
+            self.assertEqual(points.filters, {'group': 'example.plugins'})
+        finally:
+            object_module.entry_points = original
+
+    def test_load_object_missing_entry_point(self):
+        from marrow.util import object as object_module
+
+        class EntryPoints(list):
+            def select(self, **filters):
+                return self
+
+        original = object_module.entry_points
+        object_module.entry_points = EntryPoints
+        try:
+            with self.assertRaisesRegex(ValueError, 'Unknown plugin'):
+                load_object('missing', 'example.plugins')
+        finally:
+            object_module.entry_points = original
 
 
 class TestOOCache(TestCase):
@@ -30,7 +70,7 @@ class TestOOCache(TestCase):
         self.cache['C'] = 2
 
     def test_basic(self):
-        self.assertEqual(repr(self.cache), "{'A': 0, 'C': 2, 'B': 1}")
+        self.assertEqual(repr(self.cache), "{'A': 0, 'B': 1, 'C': 2}")
         self.assertEqual(len(self.cache), 3)
         self.assertEqual(self.cache['A'], 0)
 

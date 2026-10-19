@@ -30,10 +30,7 @@ if sys.version_info < (3, 0):
 else:  # pragma: no cover
     from email.utils import formatdate # DEPRECATE
     from urllib.parse import unquote_plus as unquote_
-    try:
-        from cgi import parse_qsl
-    except:
-        from urllib.parse import parse_qsl
+    from urllib.parse import parse_qsl
     basestring = str
     binary = bytes = bytes
     unicode = str

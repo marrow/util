@@ -4,7 +4,12 @@
 
 import logging
 import inspect
-import pkg_resources
+
+try:
+    from importlib.metadata import entry_points
+except ImportError: # pragma: no cover
+    import pkg_resources
+    entry_points = None
 
 from collections import defaultdict
 from functools import partial
@@ -81,7 +86,15 @@ def load_object(target, namespace=None):
     Providing a namespace does not prevent full object lookup (dot-colon notation) from working.
     """
     if namespace and ':' not in target:
-        allowable = dict((i.name,  i) for i in pkg_resources.iter_entry_points(namespace))
+        if entry_points is None:
+            available = pkg_resources.iter_entry_points(namespace)
+        else:
+            available = entry_points()
+            if hasattr(available, 'select'):
+                available = available.select(group=namespace)
+            else: # pragma: no cover
+                available = available.get(namespace, ())
+        allowable = dict((item.name, item) for item in available)
         if target not in allowable:
             raise ValueError('Unknown plugin "' + target + '"; found: ' + ', '.join(allowable))
         return allowable[target].load()
