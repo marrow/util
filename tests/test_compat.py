@@ -20,6 +20,12 @@ else:
 
 
 class TestPy3K(TestCase):
+    def test_parse_qsl(self):
+        self.assertEqual(
+            compat.parse_qsl('a=1&b=two+words'),
+            [('a', '1'), ('b', 'two words')],
+        )
+
     def test_exception(self):
         try:
             1/0
@@ -27,8 +33,8 @@ class TestPy3K(TestCase):
         except:
             exc = compat.exception()
             
-            self.assertEquals(exc.name, 'ZeroDivisionError')
-            self.assertEquals(exc.cls, ZeroDivisionError)
+            self.assertEqual(exc.name, 'ZeroDivisionError')
+            self.assertEqual(exc.cls, ZeroDivisionError)
             self.assertIn('division', exc.args[0])
             self.assertIn('by zero', exc.args[0])
         
@@ -38,24 +44,24 @@ class TestPy3K(TestCase):
         except:
             exc = compat.exception()
 
-            self.assertEquals(exc.name, 'Exception')
-            self.assertEquals(exc.cls, Exception)
-            self.assertEquals(exc.args, ('foo', 1))
+            self.assertEqual(exc.name, 'Exception')
+            self.assertEqual(exc.cls, Exception)
+            self.assertEqual(exc.args, ('foo', 1))
         
     
     def test_bytes(self):
         data = compat.binary(b'\xc3\xbc')
-        self.assertEquals(len(data), 2)
+        self.assertEqual(len(data), 2)
         
-        self.failUnless(isinstance(data.decode('utf8'), compat.unicode))
-        self.assertEquals(len(data.decode('utf8')), 1)
+        self.assertTrue(isinstance(data.decode('utf8'), compat.unicode))
+        self.assertEqual(len(data.decode('utf8')), 1)
     
     def test_unicode(self):
         text = compat.unicode(uchar())
-        self.assertEquals(len(text), 1)
+        self.assertEqual(len(text), 1)
         
-        self.failUnless(isinstance(text.encode('utf8'), compat.binary))
-        self.assertEquals(len(text.encode('utf8')), 2)
+        self.assertTrue(isinstance(text.encode('utf8'), compat.binary))
+        self.assertEqual(len(text.encode('utf8')), 2)
     
     def test_byte_errors(self):
         if sys.version_info < (3, 0):
@@ -70,7 +76,7 @@ class TestIO(TestCase):
         io = compat.IO(b"Hello world!")
         value = io.read()
         
-        self.assertEquals(value, b"Hello world!")
-        self.failUnless(isinstance(value, compat.binary))
+        self.assertEqual(value, b"Hello world!")
+        self.assertTrue(isinstance(value, compat.binary))
         
         self.assertRaises(TypeError, lambda: compat.IO(uchar()))
