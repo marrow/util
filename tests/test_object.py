@@ -3,7 +3,7 @@
 from unittest import TestCase
 
 from marrow.util.bunch import Bunch
-from marrow.util.object import flatten, load_object, Cache
+from marrow.util.object import flatten, load_object, Cache, getargspec
 
 
 
@@ -19,6 +19,40 @@ class TestOOUtils(TestCase):
         self.failUnless(load_object('marrow.util.bunch:Bunch') is Bunch)
         self.assertRaises(AttributeError, lambda: load_object('marrow.util.bunch:Foo'))
         self.assertRaises(ImportError, lambda: load_object('marrow.foo:Bar'))
+
+
+class TestGetArgSpec(TestCase):
+    def test_function(self):
+        def fn(a, b, c=1, *args, **kw):
+            pass
+
+        self.assertEqual(getargspec(fn), (['a', 'b', 'c'], {'c': 1}, True, True))
+
+    def test_method(self):
+        class Foo(object):
+            def bar(self, a, b=2):
+                pass
+
+        self.assertEqual(getargspec(Foo().bar), (['a', 'b'], {'b': 2}, False, False))
+
+    def test_class(self):
+        class Foo(object):
+            def __init__(self, a, b=2, **kw):
+                pass
+
+        class Bar(object):
+            pass
+
+        self.assertEqual(getargspec(Foo), (['a', 'b'], {'b': 2}, False, True))
+        self.assertEqual(getargspec(Bar), ([], {}, False, False))
+
+    def test_callable(self):
+        class Foo(object):
+            def __call__(self, a, *args):
+                pass
+
+        self.assertEqual(getargspec(Foo()), (['a'], {}, True, False))
+        self.assertRaises(TypeError, getargspec, 42)
 
 
 class TestOOCache(TestCase):
